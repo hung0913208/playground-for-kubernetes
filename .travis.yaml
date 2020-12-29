@@ -1,10 +1,5 @@
 dist: bionic
-language: python
-
-# Cache the big Vagrant boxes
-cache:
-  directories:
-  - /home/travis/.vagrant.d/boxes
+language: cpp
 
 install:
 # Install libvrt & KVM (see https://github.com/alvistack/ansible-role-virtualbox/blob/master/.travis.yml)
