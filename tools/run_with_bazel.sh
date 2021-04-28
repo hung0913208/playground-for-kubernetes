@@ -23,7 +23,7 @@ elif [ "$CMD" = "update-repos" ]; then
 fi
 
 if which docker &> /dev/null && [[ ${#PARAMS} -gt 0 ]]; then
-	sudo docker run 			\
+	docker run 				\
 		-e USER="root" 			\
 		-u="$(id -u)" 			\
 		-v $(pwd):$(pwd) 		\
