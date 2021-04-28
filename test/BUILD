@@ -1,4 +1,13 @@
-package(default_visibility = ["//visibility:public"])
+load("@io_bazel_rules_go//go:def.bzl", "go_test", "go_library")
+
+go_test(
+  name = "go_default_testing",
+  srcs = glob(['*.go']),
+  tags = ['selftest'],
+  deps = [
+    "//staging/src/dev.io/utils:go_default_library",
+  ]
+)
 
 filegroup(
 	name = "package-srcs",
@@ -10,6 +19,5 @@ filegroup(
 	name = "all-srcs",
 	srcs = [
 		":package-srcs",
-		"//test/multiplexer:all-srcs",
 	]
 )
