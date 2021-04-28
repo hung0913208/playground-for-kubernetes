@@ -39,12 +39,10 @@ http_archive(
     urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.13.0/rules_docker-v0.13.0.tar.gz"],
 )
 
-git_repository(
+http_archive(
     name = "build_bazel_rules_nodejs",
-    commit = "0eb4a19507211ab3863f4d82e9412a33f759abcd",
-    remote = "https://github.com/bazelbuild/rules_nodejs.git",
-    shallow_since = "1548802468 -0800",
-    #tag = "0.16.6",
+    sha256 = "55a25a762fcf9c9b88ab54436581e671bc9f4f523cb5a1bd32459ebec7be68a8",
+    urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/3.2.2/rules_nodejs-3.2.2.tar.gz"],
 )
 
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
