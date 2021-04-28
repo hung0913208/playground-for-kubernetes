@@ -16,6 +16,20 @@ install:
 - sudo vagrant plugin install vagrant-libvirt
 
 script:
+# Update our repository
+- ./tools/run_with_bazel.sh gazelle
+- ./tools/run_with_bazel.sh update-repos
+
+# Reload our repository again in order to update new parameters
+- ./tools/run_with_bazel.sh gazelle
+
+# Do selftest to verify behavious
+- ./tools/run_with_bazel.sh test //test/...
+
+# Build images
+- ./tools/run_with_bazel.sh build //cmds/...
+
+# Deploy a cluster for verification
 - sudo vagrant up --provider=libvirt
 - sudo vagrant ssh -c "echo 'hello world!'"
 - sudo ifconfig -a
