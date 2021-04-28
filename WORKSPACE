@@ -54,21 +54,22 @@ http_archive(
     sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c",
 )
 
-load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
-load("@build_bazel_rules_typescript//:package.bzl", "rules_typescript_dependencies")
-load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
-load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
-load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+go_rules_dependencies()
+go_register_toolchains(version = "1.16")
+
 load("@io_bazel_rules_docker//repositories:repositories.bzl",
     container_repositories = "repositories",)
 load("@io_bazel_rules_docker//go:image.bzl",
     _go_image_repos = "repositories",)
 
-protobuf_deps()
+load("@build_bazel_rules_typescript//:package.bzl", "rules_typescript_dependencies")
+load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
-go_rules_dependencies()
-go_register_toolchains(version = "1.16")
+protobuf_deps()
 gazelle_dependencies()
 
 container_repositories()
