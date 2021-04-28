@@ -45,6 +45,15 @@ http_archive(
     urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/3.2.2/rules_nodejs-3.2.2.tar.gz"],
 )
 
+http_archive(
+    name = "bazel_skylib",
+    urls = [
+        "https://github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
+    ],
+    sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c",
+)
+
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 load("@build_bazel_rules_typescript//:package.bzl", "rules_typescript_dependencies")
 load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
