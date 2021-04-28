@@ -22,14 +22,16 @@ elif [ "$CMD" = "update-repos" ]; then
 	PARAMS="run //:gazelle -- update-repos -from_file=go.mod -to_macro=deps.bzl%go_dependencies"
 fi
 
-if which docker &> /dev/null && [[ ${#PARAMS} -gt 0 ]]; then
-	docker run 				\
-  		-e USER="$(id -u)" 		\
-  		-u="$(id -u)" 			\
-		-v $(pwd):$(pwd) 		\
-		-v $(pwd):$(pwd) 		\
-		-w $(pwd) 			\
-  		l.gcr.io/google/bazel:latest 	\
-		--output_user_root=$(pwd) 	\
-  		$PARAMS
+if which docker &> /dev/null; then
+	if [[ ${#PARAMS} -gt 0 ]]; then
+		docker run 				\
+  			-e USER="$(id -u)" 		\
+  			-u="$(id -u)" 			\
+			-v $(pwd):$(pwd) 		\
+			-v $(pwd):$(pwd) 		\
+			-w $(pwd) 			\
+  			l.gcr.io/google/bazel:latest 	\
+			--output_user_root=$(pwd) 	\
+  			$PARAMS
+	fi
 fi
