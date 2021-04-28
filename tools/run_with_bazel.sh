@@ -16,7 +16,7 @@ if [ "$CMD" = "test" ]; then
 	PARAMS="test --test_tag_filters=selftest $@"
 elif [ "$CMD" = "build" ]; then
 	PARAMS="build $@"
-elif [ "$CMD" = "gazele" ]; then
+elif [ "$CMD" = "gazelle" ]; then
 	PARAMS="run //:gazelle"
 elif [ "$CMD" = "update-repos" ]; then
 	PARAMS="run //:gazelle -- update-repos -from_file=go.mod -to_macro=deps.bzl%go_dependencies"
