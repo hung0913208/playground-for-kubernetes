@@ -24,8 +24,8 @@ fi
 
 if which docker &> /dev/null && [[ ${#PARAMS} -gt 0 ]]; then
 	sudo docker run 			\
-		-e USER="$(id -u)" 		\
-		-u="$(id -u)" 			\
+		-e USER="root" 			\
+		-u="root" 			\
 		-v $(pwd):$(pwd) 		\
 		-v $(pwd):$(pwd) 		\
 		-w $(pwd) 			\
