@@ -18,8 +18,6 @@ elif [ "$CMD" = "build" ]; then
 	PARAMS="build $@"
 elif [ "$CMD" = "gazelle" ]; then
 	PARAMS="run //:gazelle"
-elif [ "$CMD" = "fetch-repos" ]; then
-	PARAMS="run //:gazelle -- update"
 elif [ "$CMD" = "update-repos" ]; then
 	PARAMS="run //:gazelle -- update-repos -from_file=go.mod -to_macro=deps.bzl%go_dependencies"
 fi
