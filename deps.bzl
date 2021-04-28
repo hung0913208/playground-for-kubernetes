@@ -29,7 +29,7 @@ def _maybe(repo_rule, name, **kwargs):
         repo_rule(name = name, **kwargs)
 
 def _go_default_dependencies():
-	pass
+    pass
 
 def go_dependencies():
-	_go_default_dependencies()
+    _go_default_dependencies()
