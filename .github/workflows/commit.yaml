@@ -2,11 +2,10 @@
 
 name: CI
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -34,11 +33,11 @@ jobs:
         run: |
           ./tools/run_with_bazel.sh gazelle
           ./tools/run_with_bazel.sh update-repos
-      
+
       - name: Reload our repository
         run: |
           ./tools/run_with_bazel.sh gazelle
-          
+
       - name: Do selftest
         run: ./tools/run_with_bazel.sh test //test/...
 
