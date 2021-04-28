@@ -16,11 +16,16 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Update APT repository
-        run: sudo apt update -y
+      - name: Add docker gpg key
+        run: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+      - name: Add docker repository
+        run: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
       - name: Install docker
-        run: sudo apt install -y docker.io
+        run: |
+          sudo apt update
+          sudo apt install docker-ce docker-ce-cli containerd.io
 
       - name: Update our repository
         run: |
