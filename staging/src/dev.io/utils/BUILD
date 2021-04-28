@@ -10,7 +10,6 @@ go_library(
   deps = [
     "@com_github_gorilla_mux//:go_default_library",
     "@org_golang_google_grpc//:go_default_library",
-    "@com_github_graphql-go_graphql//:go_default_library",
   ]
 )
 
