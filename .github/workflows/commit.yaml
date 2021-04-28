@@ -41,7 +41,7 @@ jobs:
       - name: Update our repository
         run: |
           ./tools/run_with_bazel.sh gazelle
-          ./tools/run_with_bazel.sh update
+          ./tools/run_with_bazel.sh fetch-repos
           ./tools/run_with_bazel.sh update-repos
 
       - name: Reload our repository
