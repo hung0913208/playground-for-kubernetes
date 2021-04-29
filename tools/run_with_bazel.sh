@@ -26,7 +26,7 @@ if [ ! -f ./go.sum ]; then
 	touch ./go.sum
 
 	if which go &> /dev/null; then
-		go list -m all
+		go list -m -json all
 	elif which docker &> /dev/null; then
 		docker run 				\
 			-e USER="$(id -u)" 		\
@@ -34,7 +34,7 @@ if [ ! -f ./go.sum ]; then
 			-v $(pwd):$(pwd) 		\
 			-v $(pwd):$(pwd) 		\
 			-w $(pwd) 			\
-			golang go list -m all
+			golang go list -m -json all
 	else
 		exit -1
 	fi

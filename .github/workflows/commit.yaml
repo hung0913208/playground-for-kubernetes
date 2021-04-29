@@ -33,6 +33,9 @@ jobs:
           sudo apt update
           sudo apt install -y bazel
 
+      - name: Install golang
+        run: sudo apt install golang-go
+
       - name: Install docker
         run: |
           sudo apt update
