@@ -38,8 +38,6 @@ if [ ! -f ./go.sum ]; then
 	else
 		exit -1
 	fi
-
-	cat ./go.sum
 fi
 
 if which bazel &> /dev/null; then
