@@ -315,9 +315,19 @@ func (self *ApiServer) reorder(endpoint, code string) Handler {
   }
 }
 
+/*! \brief Create a new API
+ *
+ *  This method is used to create a new API object and store it to our database
+ * for serving and keeping track
+ *
+ *  \param name: the api name
+ *  \return *Api: to make a chain call, we will return itself to make calling
+ *                next function easily
+ */
 func (self *ApiServer) newApi(name string) *Api {
   ret := &Api{}
 
+  if
   ret.code = self.currentVersion
   ret.name = name
   ret.owner = self
@@ -326,20 +336,40 @@ func (self *ApiServer) newApi(name string) *Api {
   return ret
 }
 
+/*! \brief Check if request is local or not
+ *
+ *  This method is used to check if the request is produced by this itself
+ * or not
+ *
+ *  \param r: the request
+ *  \return bool: return if the request is created by itself or not
+ */
 func (self *ApiServer) isLocal(r *http.Request) bool {
-  fmt.Println(r.RemoteAddr)
   return false
 }
 
+/*! \brief Check if request is internal or not
+ *
+ *  This method is used to check if the request is produced by our cluster
+ * or from outside
+ *
+ *  \param r: the request
+ *  \return bool: return if the request is created by cluster or not
+ */
 func (self *ApiServer) isInternal(r *http.Request) bool {
-  fmt.Println(r.RemoteAddr)
   return false
 }
 
-
+/*! \brief Snift in comming requests before redirect it to correct service
+ *
+ *  This method is used to listen request from everywhere and redirect them
+ * to correct placement
+ *
+ *  \param next: the handler which is registered
+ *  \return http.Handler: the actual handler which server will do
+ */
 func (self *ApiServer) handleMiddleware(next http.Handler) http.Handler {
   return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-    fmt.Println(r.RequestURI)
     next.ServeHTTP(w, r)
   })
 }
@@ -367,6 +397,13 @@ func Pack(w http.ResponseWriter) func(int, string) {
   }
 }
 
+/*! \brief Create Api server
+ *
+ *  This function is used to generate ApiServer which is used to build
+ * complicated RESTful APIs
+ *
+ *  \return *ApiServer: the server object
+ */
 func NewApiServer() *ApiServer {
   ret := &ApiServer{}
 
