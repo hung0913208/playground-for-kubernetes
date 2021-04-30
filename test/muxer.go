@@ -50,7 +50,7 @@ func TestStartStopServer(t *testing.T) {
       Mock("/echo")
 
   // start a new server
-  srv = start(r, 1080)
+  srv := start(re, 1080)
 
   // wait 10 seconds
   time.Sleep(10 * time.Second)
