@@ -61,23 +61,23 @@ func TestStartStopServer(t *testing.T) {
     t.Error("request got error %s", err.Error())
   } else if body, err := io.ReadAll(resp.Body); err != nil {
     t.Error("parsing body got error %s", err.Error())
-  } else if fmt.Sprintf("%s", body) != "hello" {
-    t.Error("can't fetch correct data: %s", fmt.Sprintf("%s", body))
+  } else if fmt.Sprintf("%s", body) != `{"code": 200, "data": "hello"}`{
+    t.Error("can't fetch correct data: ", fmt.Sprintf("%s", body))
   }
 
   if resp, err := http.Get("http://127.0.0.1:1080/v1/echo"); err != nil {
     t.Error("request got error %s", err.Error())
   } else if body, err := io.ReadAll(resp.Body); err != nil {
     t.Error("parsing body got error %s", err.Error())
-  } else if fmt.Sprintf("%s", body) != "hello" {
-    t.Error("can't fetch correct data: %s", fmt.Sprintf("%s", body))
+  } else if fmt.Sprintf("%s", body) != `{"code": 200, "data": "hello"}`{
+    t.Error("can't fetch correct data: ", fmt.Sprintf("%s", body))
   }
 
   if resp, err := http.Get("http://127.0.0.1:1080/echo1"); err != nil {
     t.Error("request got error %s", err.Error())
   } else if body, err := io.ReadAll(resp.Body); err != nil {
     t.Error("parsing body got error %s", err.Error())
-  } else if fmt.Sprintf("%s", body) == "hello" {
+  } else if fmt.Sprintf("%s", body) == `{"code": 200, "data": "hello"}`{
     t.Error("can't fetch correct data")
   }
 
