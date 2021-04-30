@@ -87,35 +87,6 @@ func (self *Api) Alias(path string) *Api {
   return self
 }
 
-/*! \brief Check if the endpoint is allowed to handle requests
- *
- *  This method is used to check and return what if the endpoint could be used
- * to handle requests
- *
- *  \param r: the user request
- *  \return *Api: to make a chain call, we will return itself to make calling
- *                next function easily
- */
-func (self *Api) IsAllowed(r *http.Request) bool {
-  if ! self.enable {
-    return false
-  }
-
-  switch(self.level) {
-    case PUBLIC:
-      return true
-
-    case PRIVATE:
-      return self.owner.isLocal(r)
-
-    case PROTECTED:
-      return self.owner.isInternal(r)
-
-    default:
-      return false
-  }
-}
-
 /*! \brief Switch main version for configuring handlers
  *
  *  This method is used to switch main version, which is used when we would like
@@ -181,7 +152,7 @@ func (self *Api) Mock(path string) *Api {
     path = fmt.Sprintf("/%s%s", self.owner.base, path)
   }
 
-  return self.alias(path)
+  return self.Alias(path)
 }
 
 /*! \brief Send ok code and message to client
@@ -208,6 +179,35 @@ func (self *Api) ok(w http.ResponseWriter) func(string) {
  */
 func (self *Api) nok(w http.ResponseWriter) func(int, string) {
   return self.owner.nok(w)
+}
+
+/*! \brief Check if the endpoint is allowed to handle requests
+ *
+ *  This method is used to check and return what if the endpoint could be used
+ * to handle requests
+ *
+ *  \param r: the user request
+ *  \return *Api: to make a chain call, we will return itself to make calling
+ *                next function easily
+ */
+func (self *Api) isAllowed(r *http.Request) bool {
+  if ! self.enable {
+    return false
+  }
+
+  switch(self.level) {
+    case PUBLIC:
+      return true
+
+    case PRIVATE:
+      return self.owner.isLocal(r)
+
+    case PROTECTED:
+      return self.owner.isInternal(r)
+
+    default:
+      return false
+  }
 }
 
 /* ------------------------- ApiServer ---------------------------- */
