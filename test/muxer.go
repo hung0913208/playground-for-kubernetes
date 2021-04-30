@@ -56,6 +56,10 @@ func TestStartStopServer(t *testing.T) {
     t.Error("request got error %s", err.Error())
   }
 
+  if _, err := http.Get("http://127.0.0.1:1080/v1/echo"); err != nil {
+    t.Error("request got error %s", err.Error())
+  }
+
   if _, err := http.Get("http://127.0.0.1:1080/echo1"); err == nil {
     t.Error("request can't produce error")
   }

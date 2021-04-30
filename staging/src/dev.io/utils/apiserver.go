@@ -10,6 +10,7 @@ type Handler func(http.ResponseWriter, *http.Request)
 
 type Version struct {
   endpoints map[string]*Api
+  code string
 }
 
 type Alias struct {
@@ -28,7 +29,7 @@ type Api struct {
 
 type ApiServer struct {
   versions map[string]*Version
-  alias map[string]*Alias
+  aliases map[string]*Alias
   router *mux.Router
 
   base, currentVersion string
@@ -56,6 +57,9 @@ func (self *Api) alias(path string) *Api {
     endpoint = tmp
   } else {
     endpoint = &Alias{}
+
+    endpoint.methods = make(map[string]*Api)
+    endpoint.enable = true
   }
 
   if endpoint.methods == nil {
@@ -63,17 +67,19 @@ func (self *Api) alias(path string) *Api {
   }
 
   for k, _ := range(self.methods) {
-    endpoints.methods[k] = self
+    endpoint.methods[k] = self
   }
 
   self.owner.aliases[path] = endpoint
   self.owner.router.HandleFunc(path,
     func(w http.ResponseWriter, r *http.Request) {
-      if ! self.enable {
+      if link, ok := self.owner.aliases[path]; ! ok {
         self.nok(w)(404, "not found")
-      } else if api, ok := self.aliases[path].methods[r.Method]; ! ok {
+      } else if ! link.enable {
         self.nok(w)(404, "not found")
-      } else {
+      } else if api, ok := link.methods[r.Method]; ! ok {
+        self.nok(w)(404, "not found")
+      } else if self.owner.aliases{
         self.owner.reorder(api.name, api.version)(w, r)
       }
     })
@@ -133,19 +139,7 @@ func (self *Api) version(code string) *ApiServer {
  *                next function easily
  */
 func (self *Api) handle(method string, handler Handler) *Api {
-  if len(self.main) == 0 {
-    panic("Please specifiy version before doing anything")
-  }
-
-  if _, ok := self.versions[self.main]; ! ok {
-    panic("There is something wrong with creating new version")
-  }
-
-  if _, ok := self.mainlines[method]; ! ok {
-    self.mainlines[method] = self.main
-  }
-
-  self.versions[self.main].methods[method] = handler
+  self.methods[method] = handler
   return self
 }
 
@@ -249,6 +243,9 @@ func (self *ApiServer) endpoint(endpoint string) *Api {
 func (self *ApiServer) version(code string) *ApiServer {
   if _, ok := self.versions[code]; ! ok {
     self.versions[code] = &Version{}
+
+    self.versions[code].code = code
+    self.versions[code].endpoints = make(map[string]*Api)
   }
 
   self.currentVersion = code
@@ -372,7 +369,8 @@ func NewApiServer() *ApiServer {
   ret := &ApiServer{}
 
   ret.router = mux.NewRouter()
-  ret.endpoints = make(map[string]*Api)
+  ret.versions = make(map[string]*Version)
+  ret.aliases = make(map[string]*Alias)
 
   ret.router.Use(self.handleMiddleware)
   return ret
