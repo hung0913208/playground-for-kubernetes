@@ -74,11 +74,11 @@ func (self *Api) Alias(path string) *Api {
   self.owner.router.HandleFunc(path,
     func(w http.ResponseWriter, r *http.Request) {
       if link, ok := self.owner.aliases[path]; ! ok {
-        self.nok(w)(404, "not found")
+        self.Nok(w)(404, "not found")
       } else if ! link.enable {
-        self.nok(w)(404, "not found")
+        self.Nok(w)(404, "not found")
       } else if api, ok := link.methods[r.Method]; ! ok {
-        self.nok(w)(404, "not found")
+        self.Nok(w)(404, "not found")
       } else {
         self.owner.reorder(api.name, api.code)(w, r)
       }
@@ -170,15 +170,15 @@ func (self *Api) Ok(w http.ResponseWriter) func(string) {
 
 /*! \brief Send nok code and message to client
  *
- *  This function is used to produce a lambda which is used to write a self.nok
+ *  This function is used to produce a lambda which is used to write a self.Nok
  * message to client
  *
  *  \param w: the response writer
  *  \return func(int, string): a lambda which is used to pack message and code
  *                             into an json object
  */
-func (self *Api) NOk(w http.ResponseWriter) func(int, string) {
-  return self.owner.NOk(w)
+func (self *Api) Nok(w http.ResponseWriter) func(int, string) {
+  return self.owner.Nok(w)
 }
 
 /*! \brief Check if the endpoint is allowed to handle requests
@@ -258,14 +258,14 @@ func (self *ApiServer) Version(code string) *ApiServer {
 
 /*! \brief Send nok code and message to client
  *
- *  This function is used to produce a lambda which is used to write a self.nok
+ *  This function is used to produce a lambda which is used to write a self.Nok
  * message to client
  *
  *  \param w: the response writer
  *  \return func(int, string): a lambda which is used to pack message and code
  *                             into an json object
  */
-func (self *ApiServer) NOk(w http.ResponseWriter) func(int, string) {
+func (self *ApiServer) Nok(w http.ResponseWriter) func(int, string) {
   return func(code int, message string) {
     Pack(w)(code, message)
   }
@@ -302,15 +302,15 @@ func (self *ApiServer) GetMuxer() *mux.Router {
 func (self *ApiServer) reorder(endpoint, code string) Handler {
   return func(w http.ResponseWriter, r *http.Request) {
     if ver, ok := self.versions[code]; ! ok {
-      self.nok(w)(404, fmt.Sprintf("Not found %s", endpoint))
+      self.Nok(w)(404, fmt.Sprintf("Not found %s", endpoint))
     } else if api, ok := ver.endpoints[endpoint]; ! ok {
-      self.nok(w)(404, fmt.Sprintf("Not found %s", endpoint))
+      self.Nok(w)(404, fmt.Sprintf("Not found %s", endpoint))
     } else if handler, ok := api.methods[r.Method]; ! ok {
-      self.nok(w)(404, fmt.Sprintf("Not found %s", endpoint))
+      self.Nok(w)(404, fmt.Sprintf("Not found %s", endpoint))
     } else if api.isAllowed(r) {
       handler(w, r)
     } else {
-      self.nok(w)(404, fmt.Sprintf("Not found %s", endpoint))
+      self.Nok(w)(404, fmt.Sprintf("Not found %s", endpoint))
     }
   }
 }
