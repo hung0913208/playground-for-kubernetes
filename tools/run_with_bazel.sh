@@ -13,7 +13,7 @@ CMD=$1
 shift
 
 if [ "$CMD" = "test" ]; then
-	PARAMS="test --test_tag_filters=selftest $@"
+	PARAMS="test --test_tag_filters=selftest --test_output=errors $@"
 elif [ "$CMD" = "build" ]; then
 	PARAMS="build $@"
 elif [ "$CMD" = "gazelle" ]; then
