@@ -38,14 +38,14 @@ func stop(srv *http.Server) {
 }
 
 func TestStartStopServer(t *testing.T) {
-  r := utils.NewApiServer()
+  re := utils.NewApiServer()
 
   // build a simple api
-  r.Version("v1").
+  re.Version("v1").
     Endpoint("echo").
       Handle("GET",
         func(w http.ResponseWriter, r *http.Request) {
-          r.ok(w)("hello")
+          re.Ok(w)("hello")
         }).
       Mock("/echo")
 

@@ -164,8 +164,8 @@ func (self *Api) Mock(path string) *Api {
  *  \return func(string): a lambda which is used to pack message and code
  *                        into an json object
  */
-func (self *Api) ok(w http.ResponseWriter) func(string) {
-  return self.owner.ok(w)
+func (self *Api) Ok(w http.ResponseWriter) func(string) {
+  return self.owner.Ok(w)
 }
 
 /*! \brief Send nok code and message to client
@@ -177,8 +177,8 @@ func (self *Api) ok(w http.ResponseWriter) func(string) {
  *  \return func(int, string): a lambda which is used to pack message and code
  *                             into an json object
  */
-func (self *Api) nok(w http.ResponseWriter) func(int, string) {
-  return self.owner.nok(w)
+func (self *Api) NOk(w http.ResponseWriter) func(int, string) {
+  return self.owner.NOk(w)
 }
 
 /*! \brief Check if the endpoint is allowed to handle requests
@@ -256,6 +256,40 @@ func (self *ApiServer) Version(code string) *ApiServer {
   return self
 }
 
+/*! \brief Send nok code and message to client
+ *
+ *  This function is used to produce a lambda which is used to write a self.nok
+ * message to client
+ *
+ *  \param w: the response writer
+ *  \return func(int, string): a lambda which is used to pack message and code
+ *                             into an json object
+ */
+func (self *ApiServer) NOk(w http.ResponseWriter) func(int, string) {
+  return func(code int, message string) {
+    Pack(w)(code, message)
+  }
+}
+
+/*! \brief Send ok code and message to client
+ *
+ *  This function is used to produce a lambda which is used to write an ok
+ * message to client
+ *
+ *  \param w: the response writer
+ *  \return func(string): a lambda which is used to pack message and code
+ *                        into an json object
+ */
+func (self *ApiServer) Ok(w http.ResponseWriter) func(string) {
+  return func(message string) {
+    Pack(w)(200, message)
+  }
+}
+
+func (self *ApiServer) GetMuxer() *mux.Router {
+  return self.router
+}
+
 /*! \brief Order a handler to redirect request to specific endpoint's version
  *
  *  This method is used to link a path to specific endpoint's version, in order
@@ -321,7 +355,7 @@ func (self *ApiServer) handleMiddleware(next http.Handler) http.Handler {
  *  \return func(int, string): a lambda which is used to pack message and code
  *                             into an json object
  */
-func pack(w http.ResponseWriter) func(int, string) {
+func Pack(w http.ResponseWriter) func(int, string) {
   return func(code int, message string) {
     if message[0] == '{' && message[len(message) - 1] == '}' {
       fmt.Fprintf(w, "{\"code\": %d, \"data\": %s}", code, message)
@@ -331,42 +365,6 @@ func pack(w http.ResponseWriter) func(int, string) {
       fmt.Fprintf(w, "{\"code\": %d, \"data\": \"%s\"}", code, message)
     }
   }
-}
-
-/*! \brief Send nok code and message to client
- *
- *  This function is used to produce a lambda which is used to write a self.nok
- * message to client
- *
- *  \param w: the response writer
- *  \return func(int, string): a lambda which is used to pack message and code
- *                             into an json object
- */
-func (self *ApiServer) nok(w http.ResponseWriter) func(int, string) {
-  return func(code int, message string) {
-    pack(w)(code, message)
-  }
-}
-
-/*! \brief Send ok code and message to client
- *
- *  This function is used to produce a lambda which is used to write an ok
- * message to client
- *
- *  \param w: the response writer
- *  \return func(string): a lambda which is used to pack message and code
- *                        into an json object
- */
-func (self *ApiServer) ok(w http.ResponseWriter) func(string) {
-  return func(message string) {
-    pack(w)(200, message)
-  }
-}
-
-/* --------------------------- public ----------------------------- */
-
-func (self *ApiServer) GetMuxer() *mux.Router {
-  return self.router
 }
 
 func NewApiServer() *ApiServer {
