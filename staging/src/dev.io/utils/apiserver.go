@@ -226,7 +226,7 @@ func (self *ApiServer) endpoint(endpoint string) *Api {
     if ver, ok := self.versions[self.currentVersion]; ! ok {
       return nil
     } else {
-      if ok, _ := ver.endpoints[endpoint]; ! ok {
+      if _, ok := ver.endpoints[endpoint]; ! ok {
         ver.endpoints[endpoint] = self.newApi(endpoint)
       }
 
