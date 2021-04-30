@@ -25,7 +25,7 @@ jobs:
         run: vagrant --version
 
       - name: Install libvirt
-        run: sudo apt-get update && sudo apt-get install -y bridge-utils dnsmasq-base ebtables libvirt-bin libvirt-dev qemu-kvm qemu-utils ruby-dev
+        run: sudo apt-get update && sudo apt-get install -y bridge-utils dnsmasq-base ebtables libvirt-clients libvirt-dev qemu-kvm qemu-utils ruby-dev
 
       - name: Install vagrant-libvirt plugin
         run: sudo vagrant plugin install vagrant-libvirt
