@@ -31,6 +31,7 @@ type ApiServer struct {
   versions map[string]*Version
   aliases map[string]*Alias
   router *mux.Router
+  apis map[string]*Api
 
   base, currentVersion string
 }
@@ -325,15 +326,20 @@ func (self *ApiServer) reorder(endpoint, code string) Handler {
  *                next function easily
  */
 func (self *ApiServer) newApi(name string) *Api {
-  ret := &Api{}
 
-  if
-  ret.code = self.currentVersion
-  ret.name = name
-  ret.owner = self
-  ret.enable = true
-  ret.methods = make(map[string]Handler)
-  return ret
+  if ret, ok := self.apis[name]; ! ok {
+    ret = &Api{}
+
+    ret.code = self.currentVersion
+    ret.name = name
+    ret.owner = self
+    ret.enable = true
+    ret.methods = make(map[string]Handler)
+
+    return ret
+  } else {
+    return ret
+  }
 }
 
 /*! \brief Check if request is local or not
