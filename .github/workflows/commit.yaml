@@ -9,21 +9,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  vagrant:
-    runs-on: macos-latest
-
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      - name: Dump vagrant verson
-        run: vagrant --version
-
-      - name: Start machines
-        run: |
-          vagrant up
-          vagrant ssh -c "echo 'hello world!'"
-
   build:
     runs-on: ubuntu-latest
 
