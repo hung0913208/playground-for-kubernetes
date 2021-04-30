@@ -16,21 +16,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Install vagrant
-        run: brew install vagrant
-
-      - name: Install libvirt
-        run: brew install libvirt
-
       - name: Dump vagrant verson
         run: vagrant --version
 
-      - name: Install vagrant-libvirt plugin
-        run: vagrant plugin install vagrant-libvirt
-
       - name: Start machines
         run: |
-          vagrant up --provider=libvirt
+          vagrant up
           vagrant ssh -c "echo 'hello world!'"
           ifconfig -a
 
