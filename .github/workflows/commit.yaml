@@ -44,6 +44,3 @@ jobs:
 
       - name: Do selftest
         run: ./tools/run_with_bazel.sh test //test/...
-
-      - name: Build commands
-        run: ./tools/run_with_bazel.sh build //cmds/...
