@@ -44,7 +44,7 @@ func TestStartStopServer(t *testing.T) {
   r.Version("v1").
     Endpoint("echo").
       Handle("GET",
-        func(w *http.ResponseWriter, r *http.Request) {
+        func(w http.ResponseWriter, r *http.Request) {
           r.ok(w)("hello")
         }).
       Mock("/echo")
