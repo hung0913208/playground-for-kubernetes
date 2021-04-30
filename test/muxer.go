@@ -8,6 +8,7 @@ import (
   "time"
   "log"
   "fmt"
+  "io"
 )
 
 func start(r *utils.ApiServer, port int) *http.Server {
