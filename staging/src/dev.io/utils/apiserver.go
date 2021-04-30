@@ -13,7 +13,7 @@ type Version struct {
 }
 
 type Alias struct {
-  code map[string]string
+  methods map[string]*Api
   enable bool
 }
 
@@ -50,31 +50,34 @@ const (
  *                next function easily
  */
 func (self *Api) alias(path string) *Api {
-  if , ok := self.owner.aliases[path]; ! ok {
-    self.owner.aliases[path] = &Alias{}
+  var endpoint *Alias
+
+  if tmp, ok := self.owner.aliases[path]; ok {
+    endpoint = tmp
+  } else {
+    endpoint = &Alias{}
   }
 
-  self.aliases[path] = &Alias{}
-  self.aliases[path].code = make(map[string]string)
-
-  for key, val := range self.mainlines {
-    self.aliases[path].code[key] = val
+  if endpoint.methods == nil {
+    endpoint.methods = make(map[string]*Api)
   }
 
+  for k, _ := range(self.methods) {
+    endpoints.methods[k] = self
+  }
+
+  self.owner.aliases[path] = endpoint
   self.owner.router.HandleFunc(path,
-    func(w http.ResponseWriter, r *http.Request){
-      code := self.aliases[path].code[r.Method]
-
-      if ver, ok := self.versions[code]; ! ok {
-        self.nok(w)(404, fmt.Sprintf("Not found %s", path))
-      } else if handler, ok := ver.methods[r.Method]; ! ok {
-        self.nok(w)(404, fmt.Sprintf("Not found %s", path))
-      } else if self.isAllowed(r) {
-        handler(w, r)
+    func(w http.ResponseWriter, r *http.Request) {
+      if ! self.enable {
+        self.nok(w)(404, "not found")
+      } else if api, ok := self.aliases[path].methods[r.Method]; ! ok {
+        self.nok(w)(404, "not found")
       } else {
-        self.nok(w)(404, fmt.Sprintf("Not found %s", path))
+        self.owner.reorder(api.name, api.version)(w, r)
       }
     })
+
   return self
 }
 
@@ -88,9 +91,7 @@ func (self *Api) alias(path string) *Api {
  *                next function easily
  */
 func (self *Api) isAllowed(r *http.Request) bool {
-  if ! self.owner.versions[self.version].enable {
-    return false
-  } else if ! self.enable {
+  if ! self.enable {
     return false
   }
 
@@ -300,6 +301,14 @@ func (self *ApiServer) isInternal(r *http.Request) bool {
   return false
 }
 
+
+func handleMiddleware(next http.Handler) http.Handler {
+  return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+    fmt.Println(r.RequestURI)
+    next.ServeHTTP(w, r)
+  })
+}
+
 /* --------------------------- helper ----------------------------- */
 
 /*! \brief Pack code and message into an json object and write back to client
@@ -365,5 +374,6 @@ func NewApiServer() *ApiServer {
   ret.router = mux.NewRouter()
   ret.endpoints = make(map[string]*Api)
 
+  ret.router.Use(self.handleMiddleware)
   return ret
 }
