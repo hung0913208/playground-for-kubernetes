@@ -56,16 +56,28 @@ func TestStartStopServer(t *testing.T) {
   time.Sleep(10 * time.Second)
 
   // do http request
-  if _, err := http.Get("http://127.0.0.1:1080/echo"); err != nil {
+  if resp, err := http.Get("http://127.0.0.1:1080/echo"); err != nil {
     t.Error("request got error %s", err.Error())
+  } else if body, err := io.ReadAll(resp.Body); err != nil {
+    t.Error("parsing body got error %s", err.Error())
+  } else if body != "hello" {
+    t.Error("can't fetch correct data")
   }
 
   if _, err := http.Get("http://127.0.0.1:1080/v1/echo"); err != nil {
     t.Error("request got error %s", err.Error())
+  } else if body, err := io.ReadAll(resp.Body); err != nil {
+    t.Error("parsing body got error %s", err.Error())
+  } else if body != "hello" {
+    t.Error("can't fetch correct data")
   }
 
-  if _, err := http.Get("http://127.0.0.1:1080/echo1"); err == nil {
-    t.Error("request can't produce error")
+  if _, err := http.Get("http://127.0.0.1:1080/echo1"); err != nil {
+    t.Error("request got error %s", err.Error())
+  } else if body, err := io.ReadAll(resp.Body); err != nil {
+    t.Error("parsing body got error %s", err.Error())
+  } else if body == "hello" {
+    t.Error("can't fetch correct data")
   }
 
   // stop server grateful
