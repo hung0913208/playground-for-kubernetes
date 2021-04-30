@@ -220,14 +220,14 @@ func (self *Api) nok(w http.ResponseWriter) func(int, string) {
  *                make calling next function easily
  */
 func (self *ApiServer) endpoint(endpoint string) *Api {
-  if ver := self.getCurrentVersion(); ver == nil {
+  if len(self.currentVersion) == 0 {
     return nil
   } else {
-    if _, ok := ver.endpoints[endpoint]; ! ok {
-      ver.endpoints[endpoint] = self.newApi(endpoint)
+    if _, ok := self.endpoints[endpoint]; ! ok {
+      self.endpoints[endpoint] = self.newApi(endpoint)
     }
 
-    return ver.endpoints[endpoint]
+    return self.endpoints[endpoint]
   }
 }
 
@@ -299,7 +299,7 @@ func (self *ApiServer) isInternal(r *http.Request) bool {
 }
 
 
-func handleMiddleware(next http.Handler) http.Handler {
+func (self *ApiServer) handleMiddleware(next http.Handler) http.Handler {
   return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
     fmt.Println(r.RequestURI)
     next.ServeHTTP(w, r)
