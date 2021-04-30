@@ -17,22 +17,22 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install vagrant
-        run: sudo brew install vagrant
+        run: brew install vagrant
 
       - name: Install libvirt
-        run: sudo brew install libvirt
+        run: brew install libvirt
 
       - name: Dump vagrant verson
-        run: sudo vagrant --version
+        run: vagrant --version
 
       - name: Install vagrant-libvirt plugin
-        run: sudo vagrant plugin install vagrant-libvirt
+        run: vagrant plugin install vagrant-libvirt
 
       - name: Start machines
         run: |
-          sudo vagrant up --provider=libvirt
-          sudo vagrant ssh -c "echo 'hello world!'"
-          sudo ifconfig -a
+          vagrant up --provider=libvirt
+          vagrant ssh -c "echo 'hello world!'"
+          ifconfig -a
 
   build:
     runs-on: ubuntu-latest
