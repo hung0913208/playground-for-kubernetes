@@ -10,28 +10,20 @@ on:
 
 jobs:
   vagrant:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Install libvirt
-        run: sudo apt-get update && sudo apt-get install -y bridge-utils dnsmasq-base ebtables libvirt-clients libvirt-dev qemu-kvm qemu-utils ruby-dev
-
-      - name: Start libvirt daemon
-        run: |
-          sudo systemctl enable libvirtd
-          sudo systemctl start libvirtd
-          sudo systemctl status libvirtd
-
       - name: Install vagrant
-        run: |
-          sudo wget -nv https://releases.hashicorp.com/vagrant/2.2.15/vagrant_2.2.15_x86_64.deb
-          sudo dpkg -i vagrant_2.2.15_x86_64.deb
+        run: sudo brew install vagrant
+
+      - name: Install libvirt
+        run: sudo brew install libvirt
 
       - name: Dump vagrant verson
-        run: vagrant --version
+        run: sudo vagrant --version
 
       - name: Install vagrant-libvirt plugin
         run: sudo vagrant plugin install vagrant-libvirt
