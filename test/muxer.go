@@ -41,13 +41,13 @@ func TestStartStopServer(t *testing.T) {
   r := utils.NewApiServer()
 
   // build a simple api
-  r.version("v1").
-    endpoint("echo").
-      handle("GET",
-      func(w *http.ResponseWriter, r *http.Request) {
-        r.ok(w)("hello")
-      }).
-      mock("/echo")
+  r.Version("v1").
+    Endpoint("echo").
+      Handle("GET",
+        func(w *http.ResponseWriter, r *http.Request) {
+          r.ok(w)("hello")
+        }).
+      Mock("/echo")
 
   // start a new server
   srv = start(r, 1080)

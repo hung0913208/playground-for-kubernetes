@@ -50,7 +50,7 @@ const (
  *  \return *Api: to make a chain call, we will return itself to make calling
  *                next function easily
  */
-func (self *Api) alias(path string) *Api {
+func (self *Api) Alias(path string) *Api {
   var endpoint *Alias
 
   if tmp, ok := self.owner.aliases[path]; ok {
@@ -96,7 +96,7 @@ func (self *Api) alias(path string) *Api {
  *  \return *Api: to make a chain call, we will return itself to make calling
  *                next function easily
  */
-func (self *Api) isAllowed(r *http.Request) bool {
+func (self *Api) IsAllowed(r *http.Request) bool {
   if ! self.enable {
     return false
   }
@@ -125,8 +125,8 @@ func (self *Api) isAllowed(r *http.Request) bool {
  *  \return *Api: to make a chain call, we will return itself to make calling
  *                next function easily
  */
-func (self *Api) version(code string) *ApiServer {
-  return self.owner.version(code)
+func (self *Api) Version(code string) *ApiServer {
+  return self.owner.Version(code)
 }
 
 /*! \brief Set handler to resolve specific endpoint's method
@@ -138,7 +138,7 @@ func (self *Api) version(code string) *ApiServer {
  *  \return *Api: to make a chain call, we will return itself to make calling
  *                next function easily
  */
-func (self *Api) handle(method string, handler Handler) *Api {
+func (self *Api) Handle(method string, handler Handler) *Api {
   self.methods[method] = handler
   return self
 }
@@ -152,8 +152,8 @@ func (self *Api) handle(method string, handler Handler) *Api {
  *  \return *Api: to make a chain call, we will return itself to make calling
  *                next function easily
  */
-func (self *Api) endpoint(endpoint string) *Api {
-  return self.owner.endpoint(endpoint)
+func (self *Api) Endpoint(endpoint string) *Api {
+  return self.owner.Endpoint(endpoint)
 }
 
 /*! \brief Mock a specific path to this endpoint
@@ -165,7 +165,7 @@ func (self *Api) endpoint(endpoint string) *Api {
  *  \return *Api: to make a chain call, we will return itself to make calling
  *                next function easily
  */
-func (self *Api) mock(path string) *Api {
+func (self *Api) Mock(path string) *Api {
   var dest string
 
   if len(self.owner.base) > 0 {
@@ -219,7 +219,7 @@ func (self *Api) nok(w http.ResponseWriter) func(int, string) {
  *  \return *Api: to make a chain call, we will return itself to
  *                make calling next function easily
  */
-func (self *ApiServer) endpoint(endpoint string) *Api {
+func (self *ApiServer) Endpoint(endpoint string) *Api {
   if len(self.currentVersion) == 0 {
     return nil
   } else {
@@ -244,7 +244,7 @@ func (self *ApiServer) endpoint(endpoint string) *Api {
  *  \return *ApiServer: to make a chain call, we will return itself
  *                      to make calling next function easily
  */
-func (self *ApiServer) version(code string) *ApiServer {
+func (self *ApiServer) Version(code string) *ApiServer {
   if _, ok := self.versions[code]; ! ok {
     self.versions[code] = &Version{}
 
