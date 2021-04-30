@@ -29,7 +29,8 @@ func start(r *utils.ApiServer, port int) *http.Server {
 }
 
 func stop(srv *http.Server) {
-  ctx, cancel := context.WithTimeout(context.Background(), wait)
+  ctx, cancel := context.WithTimeout(context.Background(),
+                                     1 * time.Second)
   defer cancel()
 
   srv.Shutdown(ctx)
