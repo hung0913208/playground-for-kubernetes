@@ -18,8 +18,8 @@ jobs:
 
       - name: Install vagrant
         run: |
-          sudo wget -nv https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_x86_64.deb
-          sudo dpkg -i vagrant_2.2.7_x86_64.deb
+          sudo wget -nv https://releases.hashicorp.com/vagrant/2.2.15/vagrant_2.2.15_x86_64.deb
+          sudo dpkg -i vagrant_2.2.15_x86_64.deb
 
       - name: Dump vagrant verson
         run: vagrant --version
