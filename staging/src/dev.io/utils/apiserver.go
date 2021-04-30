@@ -24,7 +24,7 @@ type Api struct {
   level int
   owner *ApiServer
   enable bool
-  name, version string
+  name, code string
 }
 
 type ApiServer struct {
@@ -79,8 +79,8 @@ func (self *Api) alias(path string) *Api {
         self.nok(w)(404, "not found")
       } else if api, ok := link.methods[r.Method]; ! ok {
         self.nok(w)(404, "not found")
-      } else if self.owner.aliases{
-        self.owner.reorder(api.name, api.version)(w, r)
+      } else {
+        self.owner.reorder(api.name, api.code)(w, r)
       }
     })
 
@@ -169,13 +169,13 @@ func (self *Api) mock(path string) *Api {
   var dest string
 
   if len(self.owner.base) > 0 {
-    dest = fmt.Sprintf("/%s/%s%s", self.owner.base, self.version, path)
+    dest = fmt.Sprintf("/%s/%s%s", self.owner.base, self.code, path)
   } else {
-    dest = fmt.Sprintf("/%s%s", self.version, path)
+    dest = fmt.Sprintf("/%s%s", self.code, path)
   }
 
   self.owner.router.HandleFunc(dest,
-    self.owner.reorder(self.name, self.version))
+    self.owner.reorder(self.name, self.code))
 
   if len(self.owner.base) > 0 {
     path = fmt.Sprintf("/%s%s", self.owner.base, path)
@@ -263,11 +263,11 @@ func (self *ApiServer) version(code string) *ApiServer {
  */
 func (self *ApiServer) reorder(endpoint, code string) Handler {
   return func(w http.ResponseWriter, r *http.Request) {
-    if api, ok := self.endpoints[endpoint]; ! ok {
+    if ver, ok := self.versions[code]; ! ok {
       self.nok(w)(404, fmt.Sprintf("Not found %s", endpoint))
-    } else if ver, ok := api.versions[code]; ! ok {
+    } else if api, ok := ver.endpoints[endpoint]; ! ok {
       self.nok(w)(404, fmt.Sprintf("Not found %s", endpoint))
-    } else if handler, ok := ver.methods[r.Method]; ! ok {
+    } else if handler, ok := api.methods[r.Method]; ! ok {
       self.nok(w)(404, fmt.Sprintf("Not found %s", endpoint))
     } else if api.isAllowed(r) {
       handler(w, r)
@@ -280,7 +280,7 @@ func (self *ApiServer) reorder(endpoint, code string) Handler {
 func (self *ApiServer) newApi(name string) *Api {
   ret := &Api{}
 
-  ret.main = ""
+  ret.code = self.currentVersion
   ret.name = name
   ret.owner = self
   ret.enable = true
@@ -372,6 +372,6 @@ func NewApiServer() *ApiServer {
   ret.versions = make(map[string]*Version)
   ret.aliases = make(map[string]*Alias)
 
-  ret.router.Use(self.handleMiddleware)
+  ret.router.Use(ret.handleMiddleware)
   return ret
 }
