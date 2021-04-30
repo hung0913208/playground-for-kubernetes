@@ -65,7 +65,7 @@ func TestStartStopServer(t *testing.T) {
     t.Error("can't fetch correct data")
   }
 
-  if _, err := http.Get("http://127.0.0.1:1080/v1/echo"); err != nil {
+  if resp, err := http.Get("http://127.0.0.1:1080/v1/echo"); err != nil {
     t.Error("request got error %s", err.Error())
   } else if body, err := io.ReadAll(resp.Body); err != nil {
     t.Error("parsing body got error %s", err.Error())
@@ -73,7 +73,7 @@ func TestStartStopServer(t *testing.T) {
     t.Error("can't fetch correct data")
   }
 
-  if _, err := http.Get("http://127.0.0.1:1080/echo1"); err != nil {
+  if resp, err := http.Get("http://127.0.0.1:1080/echo1"); err != nil {
     t.Error("request got error %s", err.Error())
   } else if body, err := io.ReadAll(resp.Body); err != nil {
     t.Error("parsing body got error %s", err.Error())
