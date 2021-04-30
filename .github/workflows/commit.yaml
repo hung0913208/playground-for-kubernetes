@@ -23,7 +23,6 @@ jobs:
         run: |
           vagrant up
           vagrant ssh -c "echo 'hello world!'"
-          ifconfig -a
 
   build:
     runs-on: ubuntu-latest

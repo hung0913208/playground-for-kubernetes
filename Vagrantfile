@@ -10,7 +10,6 @@ Vagrant.configure("2") do |config|
 
     config.vm.provider :virtualbox do |vb|
         vb.name = 'ubuntu'
-        vb.cpu_mode = 'host-passthrough'
 
         vb.memory = 128
         vb.cpus = 1
