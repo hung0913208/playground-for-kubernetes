@@ -61,7 +61,7 @@ func TestStartStopServer(t *testing.T) {
     t.Error("request got error %s", err.Error())
   } else if body, err := io.ReadAll(resp.Body); err != nil {
     t.Error("parsing body got error %s", err.Error())
-  } else if body != "hello" {
+  } else if fmt.Sprintf("%s", body) != "hello" {
     t.Error("can't fetch correct data")
   }
 
@@ -69,7 +69,7 @@ func TestStartStopServer(t *testing.T) {
     t.Error("request got error %s", err.Error())
   } else if body, err := io.ReadAll(resp.Body); err != nil {
     t.Error("parsing body got error %s", err.Error())
-  } else if body != "hello" {
+  } else if fmt.Sprintf("%s", body) != "hello" {
     t.Error("can't fetch correct data")
   }
 
@@ -77,7 +77,7 @@ func TestStartStopServer(t *testing.T) {
     t.Error("request got error %s", err.Error())
   } else if body, err := io.ReadAll(resp.Body); err != nil {
     t.Error("parsing body got error %s", err.Error())
-  } else if body == "hello" {
+  } else if fmt.Sprintf("%s", body) == "hello" {
     t.Error("can't fetch correct data")
   }
 
