@@ -4,6 +4,7 @@ import (
   "dev.io/cloud/utils"
   "net/http"
   "testing"
+  "context"
   "time"
   "log"
   "fmt"
@@ -23,6 +24,8 @@ func start(r *utils.ApiServer, port int) *http.Server {
       log.Println(err)
     }
   }()
+
+  return srv
 }
 
 func stop(srv *http.Server) {
@@ -46,7 +49,7 @@ func TestStartStopServer(t *testing.T) {
       mock("/echo")
 
   // start a new server
-  start(r, 1080)
+  srv = start(r, 1080)
 
   // wait 10 seconds
   time.Sleep(10 * time.Second)
@@ -65,5 +68,5 @@ func TestStartStopServer(t *testing.T) {
   }
 
   // stop server grateful
-  stop()
+  stop(srv)
 }
