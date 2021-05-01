@@ -23,8 +23,8 @@ jobs:
         run: |
           vagrant up
           vagrant status
-          vagrant ssh node1 -c 'dmesg'
-          vagrant ssh node2 -c 'dmesg'
+          vagrant ssh vm1 -c 'dmesg'
+          vagrant ssh vm2 -c 'dmesg'
 
       - name: Fetch console log
         run: |
