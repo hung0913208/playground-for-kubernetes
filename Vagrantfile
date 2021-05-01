@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
 
     config.vm.provider :virtualbox do |vb|
         vb.name = 'ubuntu'
-        vb.customeize [
+        vb.customize [
           "modifyvm",
           :id,
           "--uart1",
@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
           "1"
         ]
 
-        vb.customeize [
+        vb.customize [
           "modifyvm",
           :id,
           "--uartmode1",
