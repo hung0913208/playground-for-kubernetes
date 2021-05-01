@@ -22,7 +22,7 @@ jobs:
       - name: Start machines
         run: |
           vagrant up
-          vagrant ssh status
+          vagrant status
           vagrant ssh node1 -c 'dmesg'
           vagrant ssh node2 -c 'dmesg'
 

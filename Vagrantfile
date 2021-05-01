@@ -14,6 +14,8 @@ Vagrant.configure("2") do |config|
     config.vm.define "vm#{i}" do |node|
       node.vm.box = "ubuntu/trusty64"
 
+      node.vm.network :private_network, ip: "192.168.0.#{i}", virtualbox__intnet: true
+
       node.vm.provider :virtualbox do |vb|
         vb.customize [
           "modifyvm", :id, "--uart1", "0x3F8", "1"
