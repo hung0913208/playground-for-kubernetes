@@ -25,7 +25,9 @@ jobs:
           vagrant ssh -c "echo 'hello world!'"
 
       - name: Fetch console log
-        run: cat /tmp/vm1.log
+        run: |
+          cat /tmp/vm1.log
+          cat /tmp/vm2.log
 
   build:
     runs-on: ubuntu-latest
