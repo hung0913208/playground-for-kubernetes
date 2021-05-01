@@ -23,12 +23,11 @@ jobs:
         run: |
           vagrant up
           vagrant status
-          vagrant ssh vm1 -c 'dmesg'
-          vagrant ssh vm2 -c 'dmesg'
 
       - name: Fetch console log
         run: |
-          ls /tmp/
+          vagrant ssh vm1 -c 'ifconfig'
+          vagrant ssh vm2 -c 'ifconfig'
 
   build:
     runs-on: ubuntu-latest
