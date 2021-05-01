@@ -33,8 +33,8 @@ jobs:
 
       - name: Search drbd
         run: |
-          vagrant ssh vm1 -c 'apt update'
-          vagrant ssh vm1 -c 'apt search drbd'
+          vagrant ssh vm1 -c 'sudo apt update'
+          vagrant ssh vm1 -c 'sudo apt search drbd'
 
       - name: Fetch console log of node 1
         run:
