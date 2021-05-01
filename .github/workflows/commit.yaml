@@ -31,6 +31,11 @@ jobs:
           vagrant ssh vm1 -c 'ping -c 10 192.168.0.2'
           vagrant ssh vm2 -c 'ping -c 10 192.168.0.1'
 
+      - name: Search drbd
+        run: |
+          vagrant ssh vm1 apt update
+          vagrant ssh vm1 apt search drbd
+
       - name: Fetch console log of node 1
         run:
           cat /tmp/vm1.log

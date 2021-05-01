@@ -27,20 +27,38 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "vm2" do |node|
-    node.vm.box = "ubuntu/trusty64"
-    node.vm.network :private_network, ip: "192.168.0.2",
-                    virtualbox__intnet: true
+  (1..2).each do |vid|
+    config.vm.define "vm#{vid}" do |node|
+      node.vm.box = "ubuntu/trusty64"
+      node.vm.network :private_network, ip: "192.168.0.#{vid}",
+                      virtualbox__intnet: true
 
-    node.vm.provider :virtualbox do |vb|
-      vb.customize [
-        "modifyvm", :id, "--uart1", "0x3F8", "1"
-      ]
+      node.vm.provider :virtualbox do |vb|
+        # Enable using uart port 1
+        vb.customize [
+          "modifyvm", :id, "--uart1", "0x3F8", "1"
+        ]
 
-      # Redirect console to file
-      vb.customize [
-        "modifyvm", :id, "--uartmode1", "file", "/tmp/vm2.log"
-      ]
+        # Redirect console to file
+        vb.customize [
+          "modifyvm", :id, "--uartmode1", "file", "/tmp/vm#{vid}.log"
+        ]
+
+        # Create the second hard disk
+        vb.customize [
+          "createhd", "--filename", "/tmp/vm#{vid}.vdi",
+                      "--size", 30*1024
+        ]
+
+        # Attach the storage to our virtual machine
+        vb.customize [
+          "storageattach", :id, "--storagectl", "SATA Controller",
+                                "--port", 1,
+                                "--device", 1,
+                                "--type", "hdd",
+                                "--medium", "/tmp/vm#{vid}.vdi"
+        ]
+      end
     end
   end
 end
