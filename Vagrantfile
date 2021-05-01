@@ -11,10 +11,14 @@ Vagrant.configure("2") do |config|
   config.vm.network :private_network, type: "dhcp"
 
   for i in (1..2)
-    config.vm.define "vm#{i}" do |node|
+    ip = "192.168.0.#{i}"
+    name = "vm#{i}"
+    console = "/tmp/vm#{i}.log"
+
+    config.vm.define name do |node|
       node.vm.box = "ubuntu/trusty64"
 
-      node.vm.network :private_network, ip: "192.168.0.#{i}", virtualbox__intnet: true
+      node.vm.network :private_network, ip: ip, virtualbox__intnet: true
 
       node.vm.provider :virtualbox do |vb|
         vb.customize [
@@ -23,7 +27,7 @@ Vagrant.configure("2") do |config|
 
         # Redirect console to file
         vb.customize [
-          "modifyvm", :id, "--uartmode1", "file", "/tmp/vm#{i}.log"
+          "modifyvm", :id, "--uartmode1", "file", console
         ]
       end
     end
