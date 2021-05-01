@@ -22,14 +22,15 @@ jobs:
       - name: Start machines
         run: |
           vagrant up
-          vagrant status
+          vagrant status vm1
+          vagrant status vm2
 
       - name: Fetch console log
         run: |
-          vagrant ssh vm1 -c 'ping -c 10 192.168.0.2'
-          vagrant ssh vm2 -c 'ping -c 10 192.168.0.1'
           vagrant ssh vm1 -c 'ping -c 10 8.8.8.8'
           vagrant ssh vm2 -c 'ping -c 10 8.8.8.8'
+          vagrant ssh vm1 -c 'ping -c 10 192.168.0.2'
+          vagrant ssh vm2 -c 'ping -c 10 192.168.0.1'
 
   build:
     runs-on: ubuntu-latest
