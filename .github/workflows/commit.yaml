@@ -24,14 +24,20 @@ jobs:
           vagrant up
           vagrant status
 
-      - name: Fetch console log
+      - name: Verify network
         run: |
-          vagrant ssh vm1 -c 'ifconfig'
-          vagrant ssh vm2 -c 'ifconfig'
           vagrant ssh vm1 -c 'ping -c 10 8.8.8.8'
           vagrant ssh vm2 -c 'ping -c 10 8.8.8.8'
           vagrant ssh vm1 -c 'ping -c 10 192.168.0.2'
           vagrant ssh vm2 -c 'ping -c 10 192.168.0.1'
+
+      - name: Fetch console log of node 1
+        run:
+          cat /tmp/vm1.log
+
+      - name: Fetch console log of node 2
+        run:
+          cat /tmp/vm2.log
 
   build:
     runs-on: ubuntu-latest
