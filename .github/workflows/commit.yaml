@@ -22,11 +22,13 @@ jobs:
       - name: Start machines
         run: |
           vagrant up
+          vagrant ssh status
+          vagrant ssh node1 -c 'dmesg'
+          vagrant ssh node2 -c 'dmesg'
 
       - name: Fetch console log
         run: |
-          cat /tmp/vm1.log
-          cat /tmp/vm2.log
+          ls /tmp/
 
   build:
     runs-on: ubuntu-latest
