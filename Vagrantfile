@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
   config.vm.network :private_network, type: "dhcp"
 
   config.vm.define "vm1" do |node|
-    node.vm.box = "ubuntu/trusty64"
+    node.vm.box = "generic/ubuntu1604"
     node.vm.network :private_network, ip: "192.168.0.1",
                     virtualbox__intnet: true
 
