@@ -22,7 +22,6 @@ jobs:
       - name: Start machines
         run: |
           vagrant up
-          vagrant ssh -c "echo 'hello world!'"
 
       - name: Fetch console log
         run: |
