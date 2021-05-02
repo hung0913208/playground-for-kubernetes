@@ -15,12 +15,12 @@ Vagrant.configure("2") do |config|
       node.vm.network :private_network, ip: "192.168.0.#{vid}",
                       virtualbox__intnet: true
 
-      node.vm.provider :libvirt do |virt|
-      	virt.box = "generic/ubuntu1604"
+      node.vm.provider :virtualbox do |virt|
+        node.vm.box = "ubuntu/trusty64"
       end
 
       node.vm.provider :virtualbox do |vb|
-      	vb.box = "ubuntu/trusty64"
+        node.vm.box = "generic/ubuntu1604"
 
         # Enable using uart port 1
         vb.customize [
