@@ -17,6 +17,8 @@ Vagrant.configure("2") do |config|
                       virtualbox__intnet: true
 
       node.vm.provider :virtualbox do |vb|
+      	vb.box = "ubuntu/trusty64"
+
         # Enable using uart port 1
         vb.customize [
           "modifyvm", :id, "--uart1", "0x3F8", "1"
