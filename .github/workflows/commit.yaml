@@ -33,7 +33,7 @@ jobs:
 
       - name: Show VM info
         run: |
-          VBoxManage showvminfo $(VBoxManage list runningvms | head -n 1)
+          VBoxManage showvminfo $(VBoxManage list runningvms | head -n 1 | awk '{ print $1 }')
 
       - name: Install drbd
         run: |
