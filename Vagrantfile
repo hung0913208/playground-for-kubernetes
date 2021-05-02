@@ -34,9 +34,6 @@ Vagrant.configure("2") do |config|
                       "--size", 30*1024
         ]
 
-        # Dump VM info
-        vb.customize ["showvminfo", :id]
-
         ## Attach the storage to our virtual machine
         #vb.customize [
         #  "storageattach", :id, "--storagectl", "SATA",

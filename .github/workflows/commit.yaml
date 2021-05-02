@@ -31,6 +31,11 @@ jobs:
           vagrant ssh vm1 -c 'ping -c 10 192.168.0.2'
           vagrant ssh vm2 -c 'ping -c 10 192.168.0.1'
 
+      - name: Show VM info
+        run: |
+          VBoxManage showinfo vm1
+          VBoxManage showinfo vm2
+
       - name: Install drbd
         run: |
           vagrant ssh vm1 -c 'sudo apt update'
