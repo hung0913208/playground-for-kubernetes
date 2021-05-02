@@ -36,7 +36,7 @@ Vagrant.configure("2") do |config|
 
         # Attach the storage to our virtual machine
         vb.customize [
-          "storageattach", :id, "--storagectl", "SATAController",
+          "storageattach", :id, "--storagectl", "IDE",
                                 "--port", 1,
                                 "--device", 0,
                                 "--type", "hdd",
