@@ -33,8 +33,8 @@ jobs:
 
       - name: Show VM info
         run: |
-          VBoxManage showinfo vm1
-          VBoxManage showinfo vm2
+          VBoxManage showvminfo vm1
+          VBoxManage showvminfo vm2
 
       - name: Install drbd
         run: |
