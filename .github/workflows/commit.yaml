@@ -9,6 +9,45 @@ on:
   workflow_dispatch:
 
 jobs:
+  vagrant:
+    runs-on: macos-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Dump vagrant verson
+        run: vagrant --version
+
+      - name: Start machines
+        run: |
+          vagrant up
+          vagrant status
+
+      - name: Verify network
+        run: |
+          vagrant ssh vm1 -c 'ping -c 10 8.8.8.8'
+          vagrant ssh vm2 -c 'ping -c 10 8.8.8.8'
+          vagrant ssh vm1 -c 'ping -c 10 192.168.0.2'
+          vagrant ssh vm2 -c 'ping -c 10 192.168.0.1'
+
+      - name: Show VM info
+        run: |
+          VBoxManage list vms -l
+
+      - name: Install drbd
+        run: |
+          vagrant ssh vm1 -c 'sudo apt update'
+          vagrant ssh vm1 -c 'sudo apt search drbd'
+
+      - name: Fetch console log of node 1
+        run:
+          cat /tmp/vm1.log
+
+      - name: Fetch console log of node 2
+        run:
+          cat /tmp/vm2.log
+
   build:
     runs-on: ubuntu-latest
 

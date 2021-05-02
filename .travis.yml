@@ -6,8 +6,8 @@ install:
 - sudo apt-get update && sudo apt-get install -y bridge-utils dnsmasq-base ebtables libvirt-bin libvirt-dev qemu-kvm qemu-utils ruby-dev
 
 # Download Vagrant & Install Vagrant package
-- sudo wget -nv https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_x86_64.deb
-- sudo dpkg -i vagrant_2.2.7_x86_64.deb
+- sudo wget -nv https://releases.hashicorp.com/vagrant/2.2.15/vagrant_2.2.15_x86_64.deb
+- sudo dpkg -i vagrant_2.2.15_x86_64.deb
 
 # Vagrant correctly installed?
 - vagrant --version
@@ -16,20 +16,5 @@ install:
 - sudo vagrant plugin install vagrant-libvirt
 
 script:
-# Update our repository
-- ./tools/run_with_bazel.sh gazelle
-- ./tools/run_with_bazel.sh update-repos
-
-# Reload our repository again in order to update new parameters
-- ./tools/run_with_bazel.sh gazelle
-
-# Do selftest to verify behavious
-- ./tools/run_with_bazel.sh test //test/...
-
-# Build images
-- ./tools/run_with_bazel.sh build //cmds/...
-
 # Deploy a cluster for verification
 - sudo vagrant up --provider=libvirt
-- sudo vagrant ssh -c "echo 'hello world!'"
-- sudo ifconfig -a
