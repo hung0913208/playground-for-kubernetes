@@ -12,9 +12,12 @@ Vagrant.configure("2") do |config|
 
   (1..2).each do |vid|
     config.vm.define "vm#{vid}" do |node|
-      node.vm.box = "generic/ubuntu1604"
       node.vm.network :private_network, ip: "192.168.0.#{vid}",
                       virtualbox__intnet: true
+
+      node.vm.provider :libvirt do |virt|
+      	virt.box = "generic/ubuntu1604"
+      end
 
       node.vm.provider :virtualbox do |vb|
       	vb.box = "ubuntu/trusty64"
