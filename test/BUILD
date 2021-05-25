@@ -6,6 +6,7 @@ go_test(
   tags = ['selftest'],
   deps = [
     "//staging/src/dev.io/utils:go_default_library",
+    "//staging/src/dev.io/protoc:go_default_library",
   ]
 )
 

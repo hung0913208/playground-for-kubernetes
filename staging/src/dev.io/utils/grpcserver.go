@@ -3,7 +3,6 @@ package utils
 import (
   "google.golang.org/grpc"
   "net"
-
 )
 
 type Inventory interface {
@@ -12,6 +11,7 @@ type Inventory interface {
 }
 
 type Implementer interface {
+  Listen() (net.Listener, error)
   Version() string
   New(serv *grpc.Server) error
 }
@@ -36,14 +36,18 @@ func (self Inventory) Connect(conn *grpc.ClientConn) error {
  *  \return error: if everything ok, we will receive nil object otherwide we
  *                 will receive error which indicate issue during connecting
  */
-func (self Implementer) Serve(lis net.Listener) error {
-  serv := grpc.NewServer()
-
-  if err := self.New(serv); err != nil {
-    return err
-  } else if err := serv.Serv(list); err != nil {
+func (self Implementer) Serve() error {
+  if lis, err := self.Listen(); err != nil {
     return err
   } else {
-    return nil
+    serv := grpc.NewServer()
+
+    if err := self.New(serv); err != nil {
+      return err
+    } else if err := serv.Serv(lis); err != nil {
+      return err
+    } else {
+      return nil
+    }
   }
 }

@@ -84,5 +84,3 @@ func TestStartStopServer(t *testing.T) {
   // stop server grateful
   stop(srv)
 }
-
-func main() {}

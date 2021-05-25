@@ -1,0 +1,4 @@
+syntax = "proto3";
+
+package protoc;
+option go_package = "dev.io/cloud/protoc";
