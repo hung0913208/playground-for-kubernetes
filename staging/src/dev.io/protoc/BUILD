@@ -13,7 +13,10 @@ proto_library(
 go_grpc_library(
 	name = "devio_go_proto",
 	importpath = "dev.io/cloud/protoc",
-    	visibility = ["//visibility:public"],
+  visibility = ["//visibility:public"],
+	go_deps = [
+		"@com_github_golang_protobuf//ptypes/any:go_default_library"
+	],
 	deps = [
 		":devio_proto",
 	]
@@ -25,3 +28,4 @@ go_library(
 	importpath = "dev.io/cloud/protoc",
 	visibility = ["//visibility:public"],
 )
+
