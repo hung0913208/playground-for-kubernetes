@@ -1,4 +1,3 @@
-load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 load("@rules_proto_grpc//go:defs.bzl", "go_grpc_library")
 
@@ -8,6 +7,9 @@ proto_library(
 		"version.proto",
 		"gateway.proto",
 	],
+	deps = [
+		"@com_google_protobuf//:any_proto",
+  ],
 	visibility = ["//visibility:public"],
 )
 
@@ -15,7 +17,7 @@ go_grpc_library(
 	name = "devio_go_proto",
 	importpath = "dev.io/cloud/protoc",
   visibility = ["//visibility:public"],
-	deps = [
+	protos = [
 		":devio_proto",
 	]
 )
