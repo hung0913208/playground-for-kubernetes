@@ -48,6 +48,9 @@ load("@rules_proto_grpc//:repositories.bzl", "rules_proto_grpc_toolchains", "rul
 rules_proto_grpc_toolchains()
 rules_proto_grpc_repos()
 
+load("@rules_proto_grpc//go:repositories.bzl", rules_proto_grpc_go_repos = "go_repos")
+rules_proto_grpc_go_repos()
+
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
 rules_proto_dependencies()
 rules_proto_toolchains()
@@ -76,10 +79,6 @@ gazelle_dependencies()
 
 container_repositories()
 _go_image_repos()
-
-load("@rules_proto_grpc//go:repositories.bzl", rules_proto_grpc_go_repos = "go_repos")
-
-rules_proto_grpc_go_repos()
 
 #node_repositories(package_json = ["//:package.json"])
 #yarn_install(

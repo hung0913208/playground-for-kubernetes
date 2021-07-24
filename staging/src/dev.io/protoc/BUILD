@@ -17,14 +17,16 @@ go_grpc_library(
 	name = "devio_go_proto",
 	importpath = "dev.io/cloud/protoc",
   visibility = ["//visibility:public"],
-	protos = [
+	deps = [
 		":devio_proto",
 	]
 )
 
 go_library(
 	name = "go_default_library",
-	embed = [":devio_go_proto"],
+	deps = [
+		":devio_go_proto"
+	],
 	importpath = "dev.io/cloud/protoc",
 	visibility = ["//visibility:public"],
 )
