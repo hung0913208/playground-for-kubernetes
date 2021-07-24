@@ -35,6 +35,18 @@ http_archive(
     strip_prefix = "rules_proto_grpc-1.0.2",
 )
 
+# Download google protobuf
+http_archive(
+    name = "com_google_protobuf",
+    urls = [
+        "https://mirror.bazel.build/github.com/protocolbuffers/protobuf/archive/v3.11.3.tar.gz",
+        "https://github.com/protocolbuffers/protobuf/archive/v3.11.3.tar.gz",
+    ],
+    sha256 = "cf754718b0aa945b00550ed7962ddc167167bd922b842199eeb6505e6f344852",
+    strip_prefix = "protobuf-3.11.3",
+)
+
+# Download custom proto rules
 http_archive(
     name = "rules_proto",
     sha256 = "602e7161d9195e50246177e7c55b2f39950a9cf7366f74ed5f22fd45750cd208",
