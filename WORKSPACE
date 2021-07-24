@@ -1,13 +1,5 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-
-# Download gazelle to build go's dependencies
-http_archive(
-    name = "bazel_gazelle",
-    sha256 = "222e49f034ca7a1d1231422cdb67066b885819885c356673cb1f72f748a3c9d4",
-    urls = [
-        "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.22.3/bazel-gazelle-v0.22.3.tar.gz",
-    ],
-)
+workspace(name = "cluster")
 
 # Download bazel rules to build docker image
 http_archive(
