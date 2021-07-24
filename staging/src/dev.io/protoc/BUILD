@@ -4,7 +4,6 @@ load("@rules_proto_grpc//go:defs.bzl", "go_grpc_library")
 proto_library(
 	name = "devio_proto",
 	srcs = [
-		"version.proto",
 		"gateway.proto",
 	],
 	deps = [
