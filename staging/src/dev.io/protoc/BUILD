@@ -17,9 +17,6 @@ go_grpc_library(
 	importpath = "dev.io/cloud/protoc",
   visibility = ["//visibility:public"],
 	proto = ":gateway_proto",
-	deps = [
-    "@com_github_golang_protobuf//ptypes/any:go_default_library",
-	]
 )
 
 go_library(
