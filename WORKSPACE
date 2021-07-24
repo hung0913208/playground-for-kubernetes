@@ -3,13 +3,13 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 # Download gazelle to build go's dependencies
 http_archive(
     name = "bazel_gazelle",
-    sha256 = "112ceace31ac48a9dde28f1f1ad98e76fc7f901ef088b944a84e55bc93cd198a",
+    sha256 = "222e49f034ca7a1d1231422cdb67066b885819885c356673cb1f72f748a3c9d4",
     urls = [
         "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.22.3/bazel-gazelle-v0.22.3.tar.gz",
     ],
 )
 
-# Download bazel_rules to build docker image
+# Download bazel rules to build docker image
 http_archive(
     name = "io_bazel_rules_docker",
     sha256 = "df13123c44b4a4ff2c2f337b906763879d94871d16411bf82dcfeba892b58607",
@@ -17,30 +17,31 @@ http_archive(
     urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.13.0/rules_docker-v0.13.0.tar.gz"],
 )
 
-# Download bazel_rules for nodejs
+# Download bazel rules for nodejs
 http_archive(
     name = "build_bazel_rules_nodejs",
-    sha256 = "bfacf15161d96a6a39510e7b3d3b522cf61cb8b82a31e79400a84c5abcab5347",
+    sha256 = "dd4dc46066e2ce034cba0c81aa3e862b27e8e8d95871f567359f7a534cccb666",
     urls = [
-        "https://github.com/bazelbuild/rules_nodejs/releases/download/3.2.1/rules_nodejs-3.2.1.tar.gz"
+        "https://github.com/bazelbuild/rules_nodejs/releases/download/3.1.0/rules_nodejs-3.1.0.tar.gz"
     ],
 )
 
 # Download bazel rules for golang
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "aa301ab560203bf740d07456a505730bf1ee20f4c471f77357cd31e7e11f5170",
+    sha256 = "b725e6497741d7fc2d55fcc29a276627d10e43fa5d0bb692692890ae30d98d00",
     urls = [
-        "https://github.com/bazelbuild/rules_go/releases/download/v0.25.1/rules_go-v0.25.1.tar.gz",
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.24.3/rules_go-v0.24.3.tar.gz",
+        "https://github.com/bazelbuild/rules_go/releases/download/v0.24.3/rules_go-v0.24.3.tar.gz",
     ],
 )
 
 # Download bazel rules for grpc
 http_archive(
     name = "rules_proto_grpc",
-    sha256 = "7954abbb6898830cd10ac9714fbcacf092299fda00ed2baf781172f545120419",
-    strip_prefix = "rules_proto_grpc-3.1.1",
-    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/3.1.1.tar.gz"],
+    sha256 = "d771584bbff98698e7cb3cb31c132ee206a972569f4dc8b65acbdd934d156b33",
+    strip_prefix = "rules_proto_grpc-2.0.0",
+    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/2.0.0.tar.gz"],
 )
 
 load("@rules_proto_grpc//:repositories.bzl", "rules_proto_grpc_toolchains", "rules_proto_grpc_repos")
@@ -58,7 +59,7 @@ load("//:deps.bzl", "go_dependencies")
 
 # gazelle:repository_macro deps.bzl%go_dependencies
 go_dependencies()
-go_register_toolchains(version = "1.15.8")
+go_register_toolchains()
 
 load("@io_bazel_rules_docker//repositories:repositories.bzl",
     container_repositories = "repositories",)
