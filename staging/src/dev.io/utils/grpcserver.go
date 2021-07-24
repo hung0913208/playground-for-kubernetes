@@ -44,7 +44,7 @@ func (self Implementer) Serve() error {
 
     if err := self.New(serv); err != nil {
       return err
-    } else if err := serv.Serv(lis); err != nil {
+    } else if err := serv.Serve(lis); err != nil {
       return err
     } else {
       return nil
