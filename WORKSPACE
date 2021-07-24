@@ -17,31 +17,57 @@ http_archive(
     urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.13.0/rules_docker-v0.13.0.tar.gz"],
 )
 
-# Download bazel rules for nodejs
-http_archive(
-    name = "build_bazel_rules_nodejs",
-    sha256 = "dd4dc46066e2ce034cba0c81aa3e862b27e8e8d95871f567359f7a534cccb666",
-    urls = [
-        "https://github.com/bazelbuild/rules_nodejs/releases/download/3.1.0/rules_nodejs-3.1.0.tar.gz"
-    ],
-)
-
 # Download bazel rules for golang
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "b725e6497741d7fc2d55fcc29a276627d10e43fa5d0bb692692890ae30d98d00",
+    sha256 = "ae6814b6a8e09e7a9f5b20c1add51ada6a2cc664d4659aeca2921c10674e24e3",
     urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.24.3/rules_go-v0.24.3.tar.gz",
-        "https://github.com/bazelbuild/rules_go/releases/download/v0.24.3/rules_go-v0.24.3.tar.gz",
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.22.9/rules_go-v0.22.9.tar.gz",
+        "https://github.com/bazelbuild/rules_go/releases/download/v0.22.9/rules_go-v0.22.9.tar.gz",
     ],
 )
 
 # Download bazel rules for grpc
 http_archive(
     name = "rules_proto_grpc",
-    sha256 = "d771584bbff98698e7cb3cb31c132ee206a972569f4dc8b65acbdd934d156b33",
-    strip_prefix = "rules_proto_grpc-2.0.0",
-    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/2.0.0.tar.gz"],
+    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/1.0.2.tar.gz"],
+    sha256 = "5f0f2fc0199810c65a2de148a52ba0aff14d631d4e8202f41aff6a9d590a471b",
+    strip_prefix = "rules_proto_grpc-1.0.2",
+)
+
+http_archive(
+    name = "rules_proto",
+    sha256 = "602e7161d9195e50246177e7c55b2f39950a9cf7366f74ed5f22fd45750cd208",
+    strip_prefix = "rules_proto-97d8af4dc474595af3900dd85cb3a29ad28cc313",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz",
+        "https://github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz",
+    ],
+)
+
+# Download gazelle to build go's dependencies
+http_archive(
+    name = "bazel_gazelle",
+    sha256 = "72d339ff874a382f819aaea80669be049069f502d6c726a07759fdca99653c48",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.22.1/bazel-gazelle-v0.22.1.tar.gz",
+        "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.22.1/bazel-gazelle-v0.22.1.tar.gz",
+    ],
+)
+
+# Download nodejs
+http_archive(
+    name = "build_bazel_rules_nodejs",
+    sha256 = "55a25a762fcf9c9b88ab54436581e671bc9f4f523cb5a1bd32459ebec7be68a8",
+    urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/3.2.2/rules_nodejs-3.2.2.tar.gz"],
+)
+
+# Download typescript
+http_archive(
+    name = "build_bazel_rules_typescript",
+    sha256 = "136ba6be39b4ff934cc0f41f043912305e98cb62254d9e6af467e247daafcd34",
+    strip_prefix = "rules_typescript-0.22.0",
+    url = "https://github.com/bazelbuild/rules_typescript/archive/0.22.0.zip",
 )
 
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
