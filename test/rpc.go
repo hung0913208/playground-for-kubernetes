@@ -14,18 +14,18 @@ type sample struct {
   server *grpc.Server
 }
 
-type (self *sample) Version() string {
+func (self *sample) Version() string {
   return "v1"
 }
 
-type (self *sample) New(srv *grpc.Server) error {
+func (self *sample) New(srv *grpc.Server) error {
   self.server = srv
 
-  pb.RegisterGatewayServiceServer(srv), self)
+  pb.RegisterGatewayServiceServer(srv, self)
   return nil
 }
 
-type (self *sample) Listen() (net.Listener, error) {
+func (self *sample) Listen() (net.Listener, error) {
   if lis, err := net.Listen("tcp", "localhost:50051"); err != nil {
     return nil, err
   } else {

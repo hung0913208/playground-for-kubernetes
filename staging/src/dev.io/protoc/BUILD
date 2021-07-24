@@ -1,30 +1,31 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
 load("@rules_proto_grpc//go:defs.bzl", "go_grpc_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 proto_library(
-	name = "devio_proto",
+	name = "gateway_proto",
 	srcs = [
 		"gateway.proto",
 	],
-	deps = [
-		"@com_google_protobuf//:any_proto",
-  ],
 	visibility = ["//visibility:public"],
+	deps = [
+    "@com_github_golang_protobuf//:any_proto",  # Well-known	
+	]
 )
 
 go_grpc_library(
-	name = "devio_go_proto",
+	name = "gateway_go_proto",
 	importpath = "dev.io/cloud/protoc",
   visibility = ["//visibility:public"],
+	proto = ":gateway_proto",
 	deps = [
-		":devio_proto",
+    "@com_github_golang_protobuf//ptypes/any:go_default_library",
 	]
 )
 
 go_library(
 	name = "go_default_library",
 	deps = [
-		":devio_go_proto"
+		":gateway_go_proto",
 	],
 	importpath = "dev.io/cloud/protoc",
 	visibility = ["//visibility:public"],

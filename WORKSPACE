@@ -20,9 +20,9 @@ http_archive(
 # Download bazel rules for nodejs
 http_archive(
     name = "build_bazel_rules_nodejs",
-    sha256 = "dd4dc46066e2ce034cba0c81aa3e862b27e8e8d95871f567359f7a534cccb666",
+    sha256 = "bfacf15161d96a6a39510e7b3d3b522cf61cb8b82a31e79400a84c5abcab5347",
     urls = [
-        "https://github.com/bazelbuild/rules_nodejs/releases/download/3.1.0/rules_nodejs-3.1.0.tar.gz"
+        "https://github.com/bazelbuild/rules_nodejs/releases/download/3.2.1/rules_nodejs-3.2.1.tar.gz"
     ],
 )
 
@@ -36,13 +36,27 @@ http_archive(
     ],
 )
 
+# Download google protobuf
+http_archive(
+    name = "com_google_protobuf",
+    sha256 = "d0f5f605d0d656007ce6c8b5a82df3037e1d8fe8b121ed42e536f569dec16113",
+    strip_prefix = "protobuf-3.14.0",
+    urls = [
+        "https://mirror.bazel.build/github.com/protocolbuffers/protobuf/archive/v3.14.0.tar.gz",
+        "https://github.com/protocolbuffers/protobuf/archive/v3.14.0.tar.gz",
+    ],
+)
+
 # Download bazel rules for grpc
 http_archive(
     name = "rules_proto_grpc",
-    sha256 = "d771584bbff98698e7cb3cb31c132ee206a972569f4dc8b65acbdd934d156b33",
-    strip_prefix = "rules_proto_grpc-2.0.0",
-    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/2.0.0.tar.gz"],
+    sha256 = "7954abbb6898830cd10ac9714fbcacf092299fda00ed2baf781172f545120419",
+    strip_prefix = "rules_proto_grpc-3.1.1",
+    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/3.1.1.tar.gz"],
 )
+
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+protobuf_deps()
 
 load("@rules_proto_grpc//:repositories.bzl", "rules_proto_grpc_toolchains", "rules_proto_grpc_repos")
 rules_proto_grpc_toolchains()
@@ -66,20 +80,16 @@ go_register_toolchains()
 
 load("@io_bazel_rules_docker//repositories:repositories.bzl",
     container_repositories = "repositories",)
+container_repositories()
+
 load("@io_bazel_rules_docker//go:image.bzl",
     _go_image_repos = "repositories",)
-
-load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
-load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
-load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
-load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
-
-protobuf_deps()
-gazelle_dependencies()
-
-container_repositories()
 _go_image_repos()
 
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+gazelle_dependencies()
+
+load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
 #node_repositories(package_json = ["//:package.json"])
 #yarn_install(
 #    name = "npm",

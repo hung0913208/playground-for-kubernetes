@@ -1,10 +1,7 @@
 syntax = "proto3";
-
-package protoc;
-
 option go_package = "dev.io/cloud/protoc";
 
-//import "staging/src/dev.io/protoc/version.proto";
+package internal;
 
 message GatewayRequestV1 {
 }
