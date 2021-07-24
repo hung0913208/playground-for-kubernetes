@@ -1,5 +1,6 @@
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 workspace(name = "cluster")
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 # Download bazel rules to build docker image
 http_archive(
