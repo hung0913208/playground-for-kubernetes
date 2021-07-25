@@ -38,7 +38,7 @@ func stop(srv *http.Server) {
   log.Println("shutting down")
 }
 
-func TestStartStopServer(t *testing.T) {
+func TestStartStopAPIServer(t *testing.T) {
   re := utils.NewApiServer()
 
   // build a simple api

@@ -7,6 +7,7 @@ import (
 
   "testing"
   "errors"
+  "context"
   "fmt"
   "net"
 )
@@ -18,6 +19,11 @@ type sample struct {
 
 func (self *sample) Version() string {
   return "v1"
+}
+
+
+func (self *sample) Ping(ctx context.Context, in *pb.GatewayRequest) (*pb.GatewayResponse, error) {
+	return &pb.GatewayResponse{}, nil  
 }
 
 func (self *sample) New(srv *grpc.Server) error {
@@ -41,7 +47,7 @@ func (self *sample) Listen(protocol string) (net.Listener, error) {
   return self.listener, nil
 }
 
-func TestStartStopServer(t *testing.T) {
+func TestStartStopRPCServer(t *testing.T) {
   grpc.EnableTracing = true
 
   ctx := srv.NewGRpcContext()

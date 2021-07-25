@@ -2,8 +2,10 @@ load("@io_bazel_rules_go//go:def.bzl", "go_test", "go_library")
 
 go_test(
   name = "test_muxer",
-  srcs = ["muxer.go"],
-  tags = ['selftest'],
+  srcs = [
+    "muxer.go",
+  ],
+  tags = ["selftest"],
   deps = [
     "//staging/src/dev.io/utils:go_default_library",
   ]
@@ -11,8 +13,10 @@ go_test(
 
 go_test(
   name = "test_rpc",
-  srcs = ["rpc.go"],
-  tags = ['selftest'],
+  srcs = [
+    "rpc.go",
+  ],
+  tags = ["selftest"],
   deps = [
     "//staging/src/dev.io/utils:go_default_library",
     "//staging/src/dev.io/protoc:go_default_library",
