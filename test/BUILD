@@ -7,6 +7,7 @@ go_test(
   deps = [
     "//staging/src/dev.io/utils:go_default_library",
     "//staging/src/dev.io/protoc:go_default_library",
+    "@org_golang_google_grpc//:go_default_library",
   ]
 )
 
