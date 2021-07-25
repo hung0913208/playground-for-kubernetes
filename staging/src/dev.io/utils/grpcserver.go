@@ -199,11 +199,15 @@ func (self *GRpcContext) Serve(imp Implement) error {
       return err
     } else {
       if listener != nil && context.listenerInitializer != nil {
-        listener = context.listenerInitializer();
-      } else if cnt < len(self.protocols) {
-        continue
-      } else {
-        return errors.New("Can't serve this implement")
+        listener, err = context.listenerInitializer()
+      }
+
+      if err != nil {
+        if cnt < len(self.protocols) {
+          continue
+        } else {
+          return errors.New("Can't serve this implement")
+        }
       }
 
       serving := grpc.NewServer()
