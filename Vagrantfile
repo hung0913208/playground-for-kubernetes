@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
                       virtualbox__intnet: true
 
       node.vm.provider :virtualbox do |vb|
-        node.vm.box = "debian/jessie64"
+        node.vm.box = "generic/ubuntu1804"
 
         # Enable using uart port 1
         vb.customize [
@@ -26,21 +26,6 @@ Vagrant.configure("2") do |config|
         # Redirect console to file
         vb.customize [
           "modifyvm", :id, "--uartmode1", "file", "/tmp/vm#{vid}.log"
-        ]
-
-        # Create the second hard disk
-        vb.customize [
-          "createhd", "--filename", "/tmp/vm#{vid}.vdi",
-                      "--size", 30*1024
-        ]
-
-        # Attach the storage to our virtual machine
-        vb.customize [
-          "storageattach", :id, "--storagectl", "SATA Controller",
-                                "--port", 1,
-                                "--device", 0,
-                                "--type", "hdd",
-                                "--medium", "/tmp/vm#{vid}.vdi"
         ]
       end
     end

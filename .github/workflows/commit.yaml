@@ -61,12 +61,6 @@ jobs:
       - name: Add docker repository
         run: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
-      - name: Add bazel gpg key
-        run: curl -fsSL https://bazel.build/bazel-release.pub.gpg | sudo apt-key add -
-
-      - name: Add bazel repository
-        run: echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
-
       - name: Install docker
         run: |
           sudo apt update

@@ -28,12 +28,12 @@ if [ ! -f ./go.sum ]; then
 	if which go &> /dev/null; then
 		go list -m -json all
 	elif which docker &> /dev/null; then
-		docker run 				\
-			-e USER="$(id -u)" 		\
-			-u="$(id -u)" 			\
-			-v $(pwd):$(pwd) 		\
-			-v $(pwd):$(pwd) 		\
-			-w $(pwd) 			\
+		docker run 								\
+			-e USER="$(id -u)" 			\
+			-u="$(id -u)" 					\
+			-v $(pwd):$(pwd) 				\
+			-v $(pwd):$(pwd) 				\
+			-w $(pwd) 							\
 			golang go list -m -json all
 	else
 		exit -1
@@ -43,13 +43,15 @@ fi
 if which bazel &> /dev/null; then
 	bazel $PARAMS
 elif which docker &> /dev/null && [[ ${#PARAMS} -gt 0 ]]; then
-	docker run 				\
-		-e USER="$(id -u)" 		\
-		-u="$(id -u)" 			\
-		-v $(pwd):$(pwd) 		\
-		-v $(pwd):$(pwd) 		\
-		-w $(pwd) 			\
-		l.gcr.io/google/bazel:latest 	\
+	IMAGE="l.gcr.io/google/bazel:2.2.0"
+
+	docker run 										\
+		-e USER="$(id -u)" 					\
+		-u="$(id -u)" 							\
+		-v $(pwd):$(pwd) 						\
+		-v $(pwd):$(pwd) 						\
+		-w $(pwd) 									\
+		$IMAGE 											\
 		--output_user_root=$(pwd) 	\
 		$PARAMS
 fi

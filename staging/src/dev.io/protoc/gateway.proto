@@ -1,0 +1,20 @@
+syntax = "proto3";
+option go_package = "dev.io/cloud/protoc";
+
+package internal;
+
+message GatewayRequestV1 {
+}
+
+message GatewayResponseV1 {
+}
+
+message GatewayRequest {
+}
+
+message GatewayResponse {
+}
+
+service GatewayService {
+	rpc Ping(GatewayRequest) returns (GatewayResponse) {}
+}

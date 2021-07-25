@@ -8,8 +8,11 @@ go_library(
   importmap = "dev.io/cloud/vendor/dev.io/gw",
   importpath = "dev.io/cloud/gw",
   deps = [
+    "//staging/src/dev.io/protoc:go_default_library",
+    "//staging/src/dev.io/utils:go_default_library",
     "@com_github_gorilla_mux//:go_default_library",
     "@org_golang_google_grpc//:go_default_library",
+    "@com_github_google_uuid//:go_default_library",
     "@com_github_graphql-go_graphql//:go_default_library",
   ]
 )
