@@ -25,7 +25,11 @@ func (self *sample) New(srv *grpc.Server) error {
   return nil
 }
 
-func (self *sample) Listen() (net.Listener, error) {
+func (self *sample) Listen(protocol string) (net.Listener, error) {
+  if protocol != "tcp" {
+    return nil, errors.New(fmt.Sprintf("don't support %s", protocol))
+  }
+
   if lis, err := net.Listen("tcp", "localhost:50051"); err != nil {
     return nil, err
   } else {
@@ -36,9 +40,12 @@ func (self *sample) Listen() (net.Listener, error) {
 }
 
 func TestStartStopServer(t *testing.T) {
+  grpc.EnableTracing = true
+
+  ctx := srv.NewGRpcContext()
   smp := &sample{}
 
   go func() {
-    smp.Serve()
+    ctx.Serve(smp)
   }()
 }
