@@ -8,7 +8,7 @@ import (
   "time"
   "log"
   "fmt"
-  "io"
+  "io/ioutil"
 )
 
 func start(r *utils.ApiServer, port int) *http.Server {
@@ -59,7 +59,7 @@ func TestStartStopServer(t *testing.T) {
   // do http request
   if resp, err := http.Get("http://127.0.0.1:1080/echo"); err != nil {
     t.Error("request got error %s", err.Error())
-  } else if body, err := io.ReadAll(resp.Body); err != nil {
+  } else if body, err := ioutil.ReadAll(resp.Body); err != nil {
     t.Error("parsing body got error %s", err.Error())
   } else if fmt.Sprintf("%s", body) != `{"code": 200, "data": "hello"}`{
     t.Error("can't fetch correct data: ", fmt.Sprintf("%s", body))
@@ -67,7 +67,7 @@ func TestStartStopServer(t *testing.T) {
 
   if resp, err := http.Get("http://127.0.0.1:1080/v1/echo"); err != nil {
     t.Error("request got error %s", err.Error())
-  } else if body, err := io.ReadAll(resp.Body); err != nil {
+  } else if body, err := ioutil.ReadAll(resp.Body); err != nil {
     t.Error("parsing body got error %s", err.Error())
   } else if fmt.Sprintf("%s", body) != `{"code": 200, "data": "hello"}`{
     t.Error("can't fetch correct data: ", fmt.Sprintf("%s", body))
@@ -75,7 +75,7 @@ func TestStartStopServer(t *testing.T) {
 
   if resp, err := http.Get("http://127.0.0.1:1080/echo1"); err != nil {
     t.Error("request got error %s", err.Error())
-  } else if body, err := io.ReadAll(resp.Body); err != nil {
+  } else if body, err := ioutil.ReadAll(resp.Body); err != nil {
     t.Error("parsing body got error %s", err.Error())
   } else if fmt.Sprintf("%s", body) == `{"code": 200, "data": "hello"}`{
     t.Error("can't fetch correct data")
