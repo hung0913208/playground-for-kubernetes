@@ -109,11 +109,3 @@
       src: ./kube-config
       dest: /root/.kube/config
       mode: '0644'
-
-  - name: Wait for nodes to be ready
-    shell: "/usr/bin/kubectl get nodes"
-    register: nodes
-    until:      
-      - '" Ready "  in nodes.stdout'      
-    retries: 60
-    delay: 2

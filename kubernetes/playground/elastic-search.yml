@@ -1,0 +1,138 @@
+- hosts: all
+  become: true
+  tasks:
+  # @NOTE: begin to start configuring k8s cluster
+  - name: Install python3-pip
+    apt:
+      name: python3-pip
+      state: present
+
+  - name: Install library kubernetes
+    pip:
+      name: kubernetes
+      state: present
+
+  # @NOTE: define what we would like to do with this cluser
+  - name: Create namespace kube-logging
+    kubernetes.core.k8s:
+      name: kube-logging
+      api_version: v1
+      kind: Namespace
+      state: present
+  
+  - name: Create a elastic search headless service
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: elasticsearch
+          namespace: kube-logging
+          labels:
+            app: elasticsearch
+        spec:
+          selector:
+            app: elasticsearch
+          ports:
+          - protocol: TCP
+            name: port-9200-elasticsearch-tcp
+            port: 9200
+          - protocol: TCP
+            name: port-9300-elasticsearch-tcp
+            port: 9300
+          clusterIP: None
+  
+  - name: Create elastic search stateful set
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: apps/v1
+        kind: StatefulSet
+        metadata:
+          name: es-cluster
+          namespace: kube-logging
+        spec:
+          serviceName: elasticsearch
+          replicas: 2
+          selector:
+            matchLabels:
+              app: elasticsearch
+          template:
+            metadata:
+              labels:
+                app: elasticsearch
+            spec:
+              containers:
+              - name: elasticsearch
+                image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+                resources:
+                    limits:
+                      cpu: 1000m
+                    requests:
+                      cpu: 100m
+                ports:
+                - containerPort: 9200
+                  name: rest
+                  protocol: TCP
+                - containerPort: 9300
+                  name: inter-node
+                  protocol: TCP
+                volumeMounts:
+                - name: data
+                  mountPath: /usr/share/elasticsearch/data
+                env:
+                - name: cluster.name
+                  value: k8s-logs
+                - name: node.name
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: discovery.seed_hosts
+                  value: "es-cluster-0.elasticsearch,es-cluster-1.elasticsearch"
+                - name: cluster.initial_master_nodes
+                  value: "es-cluster-0,es-cluster-1"
+                - name: ES_JAVA_OPTS
+                  value: "-Xms512m -Xmx512m"
+            initContainers:
+            - name: fix-permissions
+              image: busybox
+              command: ["sh", "-c", "chown -R 1000:1000 /usr/share/elasticsearch/data"]
+              securityContext:
+                privileged: true
+              volumeMounts:
+              - name: data
+                mountPath: /usr/share/elasticsearch/data
+            - name: increase-vm-max-map
+              image: busybox
+              command: ["sysctl", "-w", "vm.max_map_count=262144"]
+              securityContext:
+                privileged: true
+            - name: increase-fd-ulimit
+              image: busybox
+              command: ["sh", "-c", "ulimit -n 65536"]
+              securityContext:
+                privileged: true
+          volumeClaimTemplates:
+          - metadata:
+              name: data
+              labels:
+                app: elasticsearch
+            spec:
+              accessModes: [ "ReadWriteOnce" ]
+              storageClassName: do-block-storage
+              resources:
+                requests:
+                  storage: 1Gi
+
+  # @NOTE: remove toolbox after finish configure k8s cluster
+  - name: Remove library kubernetes
+    pip:
+      name: kubernetes
+      state: absent
+
+  - name: Remove python3-pip
+    apt:
+      name: python3-pip
+      state: absent
+

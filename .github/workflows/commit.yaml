@@ -22,7 +22,7 @@ jobs:
           path: ~/.vagrant.d/boxes
           key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
           restore-keys: |
-            ${{ runner.os }}-vagrant-
+            ${{ runner.os }}-vagrant
 
       - name: Install packages
         run: |
@@ -44,7 +44,6 @@ jobs:
       - name: Start machines
         run: |
           vagrant up
-          vagrant status
 
       - name: Verify network
         run: |
@@ -60,15 +59,15 @@ jobs:
       - name: Show kube config
         run: |
           vagrant ssh vm1 -c 'kubectl get nodes'
+          vagrant ssh vm1 -c 'kubectl get deployments --all-namespaces'
+          vagrant ssh vm1 -c 'kubectl get services --all-namespaces'
+          vagrant ssh vm1 -c 'kubectl get pods --all-namespaces'
 
       - name: Fetch console log of node 1
         run: cat /tmp/vm1.log
 
       - name: Fetch console log of node 2
         run: cat /tmp/vm2.log
-
-      - name: Sleep before we stop everything
-        run: sleep 120
 
   build:
     runs-on: ubuntu-latest

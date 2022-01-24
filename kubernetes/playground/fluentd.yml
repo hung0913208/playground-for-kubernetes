@@ -1,9 +1,134 @@
----
 - hosts: all
   become: true
   tasks:
-  - name: Show cluster status
-    command: kubectl get nodes
-    register: get_cluster_status
+  # @NOTE: begin to start configuring k8s cluster
+  - name: Install python3-pip
+    apt:
+      name: python3-pip
+      state: present
 
-  - debug: msg="{{ get_cluster_status.stdout }}"
+  - name: Install library kubernetes
+    pip:
+      name: kubernetes
+      state: present
+
+  # @NOTE: define what we would like to do with this cluser
+  - name: Define a service account
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: ServiceAccount
+        metadata:
+          name: fluentd
+          namespace: kube-logging
+          labels:
+            app: fluentd 
+
+  - name: Define a cluster role
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: ClusterRole
+        metadata:
+          name: fluentd
+          labels:
+            app: fluentd
+        rules:
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          - namespaces
+          verbs:
+          - get
+          - list
+          - watch
+
+  - name: Wrap around the cluster role with a binding
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRoleBinding
+        metadata:
+          name: fluentd
+        roleRef:
+          kind: ClusterRole
+          name: fluentd
+          apiGroup: rbac.authorization.k8s.io
+        subjects:
+          - kind: ServiceAccount
+            name: fluentd
+            namespace: kube-logging
+
+  - name: Define fluentd daemon set
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: apps/v1
+        kind: DaemonSet
+        metadata:
+          name: fluentd
+          namespace: kube-logging
+          labels:
+            app: fluentd
+        spec:
+          selector:
+            matchLabels:
+              app: fluentd
+          template:
+            metadata:
+              labels:
+                app: fluentd
+            spec:
+              serviceAccount: fluentd
+              serviceAccountName: fluentd
+              tolerations:
+              - key: node-role.kubernetes.io/master
+                effect: NoSchedule
+              containers:
+              - name: fluentd
+                image: fluent/fluentd-kubernetes-daemonset:v1.4.2-debian-elasticsearch-1.1
+                env:
+                  - name:  FLUENT_ELASTICSEARCH_HOST
+                    value: "elasticsearch.kube-logging.svc.cluster.local"
+                  - name:  FLUENT_ELASTICSEARCH_PORT
+                    value: "9200"
+                  - name: FLUENT_ELASTICSEARCH_SCHEME
+                    value: "http"
+                  - name: FLUENTD_SYSTEMD_CONF
+                    value: disable
+                resources:
+                  limits:
+                    memory: 512Mi
+                  requests:
+                    cpu: 100m
+                    memory: 200Mi
+                volumeMounts:
+                - name: varlog
+                  mountPath: /var/log
+                - name: varlibdockercontainers
+                  mountPath: /var/lib/docker/containers
+                  readOnly: true
+              terminationGracePeriodSeconds: 30
+              volumes:
+              - name: varlog
+                hostPath:
+                  path: /var/log
+              - name: varlibdockercontainers
+                hostPath:
+                  path: /var/lib/docker/containers
+
+  # @NOTE: remove toolbox after finish configure k8s cluster
+  - name: Remove library kubernetes
+    pip:
+      name: kubernetes
+      state: absent
+
+  - name: Remove python3-pip
+    apt:
+      name: python3-pip
+      state: absent
+

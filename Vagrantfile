@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-CLUSTER_SIZE = 2
+CLUSTER_SIZE = 3
 
 Vagrant.configure("2") do |config|
   config.vm.boot_timeout = 1800
