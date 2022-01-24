@@ -24,6 +24,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-vagrant-
 
+      - name: Install packages
+        run: |
+          brew install coreutils
+
+      - name: Forward ssh port to outside
+        run:
+          ./tools/ngrok.sh ngrok --token 7nsnZzeTKzAkoXQ5bePpv_7FvzW7BanpsCzA943wfig ssh -- --password rootroot --port 22
+
       - name: Install ansible and its plugins
         run: |
           sudo pip3 install --upgrade pip
@@ -32,6 +40,7 @@ jobs:
       - name: Install ansible plugins
         run: |
           ansible-galaxy collection install ansible.posix
+          ansible-galaxy collection install kubernetes.core
 
       - name: Dump vagrant verson
         run: vagrant --version
@@ -53,12 +62,13 @@ jobs:
           VBoxManage list vms -l
 
       - name: Fetch console log of node 1
-        run:
-          cat /tmp/vm1.log
+        run: cat /tmp/vm1.log
 
       - name: Fetch console log of node 2
-        run:
-          cat /tmp/vm2.log
+        run: cat /tmp/vm2.log
+
+      - name: Sleep before we stop everything
+        run: sleep 120
 
   build:
     runs-on: ubuntu-latest
