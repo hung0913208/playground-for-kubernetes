@@ -24,6 +24,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-vagrant-
 
+      - name: Install ansible and its plugins
+        run: |
+          sudo pip3 install --upgrade pip
+          sudo pip3 install ansible-core
+
+      - name: Install ansible plugins
+        run: |
+          ansible-galaxy collection install ansible.posix
+
       - name: Dump vagrant verson
         run: vagrant --version
 
@@ -42,11 +51,6 @@ jobs:
       - name: Show VM info
         run: |
           VBoxManage list vms -l
-
-      - name: Install drbd
-        run: |
-          vagrant ssh vm1 -c 'sudo apt update'
-          vagrant ssh vm1 -c 'sudo apt search drbd'
 
       - name: Fetch console log of node 1
         run:
