@@ -28,10 +28,6 @@ jobs:
         run: |
           brew install coreutils
 
-      - name: Forward ssh port to outside
-        run:
-          ./tools/ngrok.sh ngrok --token 7nsnZzeTKzAkoXQ5bePpv_7FvzW7BanpsCzA943wfig ssh -- --password rootroot --port 22
-
       - name: Install ansible and its plugins
         run: |
           sudo pip3 install --upgrade pip
@@ -52,14 +48,18 @@ jobs:
 
       - name: Verify network
         run: |
-          vagrant ssh vm1 -c 'ping -c 10 8.8.8.8'
-          vagrant ssh vm2 -c 'ping -c 10 8.8.8.8'
-          vagrant ssh vm1 -c 'ping -c 10 192.168.0.2'
-          vagrant ssh vm2 -c 'ping -c 10 192.168.0.1'
+          vagrant ssh vm1 -c 'ping -c 1 8.8.8.8'
+          vagrant ssh vm2 -c 'ping -c 1 8.8.8.8'
+          vagrant ssh vm1 -c 'ping -c 1 192.168.0.2'
+          vagrant ssh vm2 -c 'ping -c 1 192.168.0.1'
 
       - name: Show VM info
         run: |
           VBoxManage list vms -l
+
+      - name: Show kube config
+        run: |
+          vagrant ssh vm1 -c 'kubectl get nodes'
 
       - name: Fetch console log of node 1
         run: cat /tmp/vm1.log

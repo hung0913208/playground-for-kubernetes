@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+CLUSTER_SIZE = 2
+
 Vagrant.configure("2") do |config|
   config.vm.boot_timeout = 1800
 
@@ -8,9 +10,9 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
   # Configure network
-  # config.vm.network :private_network, type: "dhcp"
+  config.vm.network :private_network, type: "dhcp"
 
-  (1..2).each do |vid|
+  (1..CLUSTER_SIZE).each do |vid|
     config.vm.define "vm#{vid}" do |node|
       node.vm.network :private_network, ip: "192.168.0.#{vid}",
                       virtualbox__intnet: true
@@ -44,6 +46,21 @@ Vagrant.configure("2") do |config|
           ansible.extra_vars = {
             node_ip: "192.168.0.#{vid}",
           }
+        end
+      end
+
+      if vid == CLUSTER_SIZE then
+        node.trigger.after :up do |trigger|
+          trigger.info = "Start playground"
+
+          Dir.glob('kubernetes/playground/*.yml') do |yaml|
+            node.vm.provision "ansible" do |ansible|
+              ansible.playbook = yaml
+              ansible.extra_vars = {
+                node_ip: "192.168.0.#{vid}",
+              }
+            end
+          end
         end
       end
     end

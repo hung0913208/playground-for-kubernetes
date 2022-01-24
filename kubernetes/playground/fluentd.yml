@@ -1,0 +1,9 @@
+---
+- hosts: all
+  become: true
+  tasks:
+  - name: Show cluster status
+    command: kubectl get nodes
+    register: get_cluster_status
+
+  - debug: msg="{{ get_cluster_status.stdout }}"

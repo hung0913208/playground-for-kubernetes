@@ -94,7 +94,26 @@
       line: Environment="KUBELET_EXTRA_ARGS=--node-ip={{ output.stdout }}"
 
   - name: Copy the join command to server location
-    copy: src=/tmp/join-command dest=/tmp/join-command.sh mode=0777
+    copy: src=./join-command dest=/tmp/join-command.sh mode=0777
 
   - name: Join the node to cluster
     command: sh /tmp/join-command.sh
+
+  - name: Create kube directory
+    file:
+      path: /root/.kube
+      state: directory
+
+  - name: Copy the kube config to server location
+    copy: 
+      src: ./kube-config
+      dest: /root/.kube/config
+      mode: '0644'
+
+  - name: Wait for nodes to be ready
+    shell: "/usr/bin/kubectl get nodes"
+    register: nodes
+    until:      
+      - '" Ready "  in nodes.stdout'      
+    retries: 60
+    delay: 2
