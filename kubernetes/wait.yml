@@ -1,0 +1,8 @@
+- hosts: all
+  become: true
+  tasks: 
+  - name: Wait for control-plane pods become ready
+    shell: "kubectl wait --for=condition=Ready pods --all --all-namespaces --timeout=600s"
+    register: control_plane_pods_ready
+  
+  - debug: var=control_plane_pods_ready.stdout_lines

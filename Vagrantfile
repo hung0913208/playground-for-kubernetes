@@ -61,6 +61,13 @@ Vagrant.configure("2") do |config|
               }
             end
           end
+            
+          node.vm.provision "ansible" do |ansible|
+            ansible.playbook = "kubernetes/wait.yml"
+            ansible.extra_vars = {
+              node_ip: "192.168.0.#{vid}",
+            }
+          end
         end
       end
     end
